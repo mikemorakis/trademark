@@ -50,6 +50,7 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
       <nav class="main-nav" id="mainNav">
         <div class="nav-mobile-header">
           <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" class="nav-mobile-logo" />
+          <button class="nav-close" id="navClose" aria-label="Close menu">&times;</button>
         </div>
         <div class="nav-links">
           <a href="/p/trademark-hoop_26.html">The Hoop</a>
@@ -167,7 +168,10 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
 
   <script>
     document.getElementById('hamburger')?.addEventListener('click', () => {
-      document.getElementById('mainNav')?.classList.toggle('open');
+      document.getElementById('mainNav')?.classList.add('open');
+    });
+    document.getElementById('navClose')?.addEventListener('click', () => {
+      document.getElementById('mainNav')?.classList.remove('open');
     });
 
     const header = document.getElementById('siteHeader');
