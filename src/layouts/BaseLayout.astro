@@ -6,7 +6,6 @@ interface Props {
 }
 
 const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Registration. Litigation.', transparentHeader = false } = Astro.props;
-import '../styles/global.css';
 ---
 
 <html lang="el">
@@ -16,6 +15,7 @@ import '../styles/global.css';
   <meta name="description" content={description} />
   <title>{title} | The Trademark Hoop</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/styles.css" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="canonical" href={Astro.url.href} />
   <slot name="head" />
