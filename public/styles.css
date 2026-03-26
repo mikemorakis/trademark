@@ -546,11 +546,13 @@ img {
 
 .academic-item {
   background: rgba(255,255,255,0.08);
-  padding: 28px;
+  padding: 24px;
   border-radius: 10px;
   transition: all 0.3s;
   border: 1px solid rgba(255,255,255,0.1);
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 .academic-item:hover {
@@ -559,15 +561,31 @@ img {
   color: var(--white);
 }
 
-.academic-item h4 {
-  font-size: 0.95rem;
+.pub-logo {
+  width: 48px;
+  height: 48px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 700;
   color: var(--white);
-  margin-bottom: 8px;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+
+.academic-item h4 {
+  font-size: 0.92rem;
+  color: var(--white);
+  margin-bottom: 4px;
   line-height: 1.4;
 }
 
 .academic-item .publisher {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--orange-light);
 }
 
@@ -611,11 +629,71 @@ img {
   color: var(--orange);
 }
 
+.story-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.story-logo {
+  width: 36px;
+  height: 36px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
 .story-source-badge {
   font-family: var(--font-heading);
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Section: Clients */
+.section-clients {
+  padding: 80px 0;
+  background: var(--white);
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.client-item {
+  background: var(--light-gray);
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  transition: all 0.3s;
+  border: 1px solid var(--gray);
+}
+
+.client-item:hover {
+  border-color: var(--orange);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.client-placeholder {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-gray);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -1931,11 +2009,16 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .clients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .section-services,
   .section-academic,
   .section-stories,
   .section-faq,
-  .section-contact {
+  .section-contact,
+  .section-clients {
     padding: 50px 0;
   }
 

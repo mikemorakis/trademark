@@ -57,12 +57,18 @@ const stories = [
 ];
 
 const academicPubs = [
-  { title: 'European Intellectual Property Review', publisher: 'Sweet & Maxwell', url: '/2024/01/european-intellectual-property-review.html' },
-  { title: 'Kluwer Trademark Blog', publisher: 'Wolters Kluwer N.V.', url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html' },
-  { title: 'Journal of Intellectual Property Law & Practice', publisher: 'Oxford University Press', url: '/2023/05/journal-of-intellectual-property-law.html' },
-  { title: 'Ο κίνδυνος σύγχυσης στο δίκαιο του σήματος', publisher: 'Νομική Βιβλιοθήκη (Monograph)', url: '/2022/09/dikaio-simatwn.html' },
-  { title: 'Δίκαιο Τεχνολογίας & Επικοινωνίας (ΔΙΤΕ)', publisher: 'Νομική Βιβλιοθήκη', url: '/2024/02/adwords-google-trademark.html' },
-  { title: 'ΣΥΝΗΓΟΡΟΣ', publisher: 'Νομική Βιβλιοθήκη', url: '/2023/04/blog-post.html' },
+  { title: 'European Intellectual Property Review', publisher: 'Sweet & Maxwell', url: '/2024/01/european-intellectual-property-review.html', initials: 'EIPR' },
+  { title: 'Kluwer Trademark Blog', publisher: 'Wolters Kluwer N.V.', url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html', initials: 'KTB' },
+  { title: 'Journal of Intellectual Property Law & Practice', publisher: 'Oxford University Press', url: '/2023/05/journal-of-intellectual-property-law.html', initials: 'JIPLP' },
+  { title: 'Ο κίνδυνος σύγχυσης στο δίκαιο του σήματος', publisher: 'Νομική Βιβλιοθήκη (Monograph)', url: '/2022/09/dikaio-simatwn.html', initials: 'NB' },
+  { title: 'Δίκαιο Τεχνολογίας & Επικοινωνίας (ΔΙΤΕ)', publisher: 'Νομική Βιβλιοθήκη', url: '/2024/02/adwords-google-trademark.html', initials: 'DITE' },
+  { title: 'ΣΥΝΗΓΟΡΟΣ', publisher: 'Νομική Βιβλιοθήκη', url: '/2023/04/blog-post.html', initials: 'SYN' },
+];
+
+const clients = [
+  'Client 1', 'Client 2', 'Client 3',
+  'Client 4', 'Client 5', 'Client 6',
+  'Client 7', 'Client 8', 'Client 9',
 ];
 ---
 
@@ -138,8 +144,11 @@ const academicPubs = [
       <div class="academic-grid">
         {academicPubs.map(pub => (
           <a href={pub.url} class="academic-item">
-            <h4>{pub.title}</h4>
-            <span class="publisher">{pub.publisher}</span>
+            <span class="pub-logo">{pub.initials}</span>
+            <div>
+              <h4>{pub.title}</h4>
+              <span class="publisher">{pub.publisher}</span>
+            </div>
           </a>
         ))}
       </div>
@@ -154,13 +163,33 @@ const academicPubs = [
       <div class="stories-grid-home">
         {stories.map(story => (
           <a href={story.url} class="story-item">
-            <span class="story-source-badge">{story.source}</span>
+            <div class="story-header">
+              <span class="story-logo">{story.source.charAt(0)}</span>
+              <span class="story-source-badge">{story.source}</span>
+            </div>
             <h4>{story.title}</h4>
           </a>
         ))}
       </div>
       <div class="center-cta">
         <a href="/p/1.html" class="btn-outline">Δείτε όλα τα TM Stories</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: Clients -->
+  <section class="section-clients" id="clients">
+    <div class="container">
+      <h2 class="section-title">Εταιρίες που μας εμπιστεύτηκαν</h2>
+      <div class="clients-grid">
+        {clients.map((client, i) => (
+          <div class="client-item">
+            <span class="client-placeholder">{client}</span>
+          </div>
+        ))}
+      </div>
+      <div class="center-cta">
+        <a href="/p/who.html" class="btn-outline">Όλες οι εταιρείες</a>
       </div>
     </div>
   </section>
