@@ -244,10 +244,19 @@ const clients = [
             </div>
           </div>
         </div>
-        <form class="contact-form-home" action="https://formsubmit.co/info@thetrademarkhoop.com" method="POST">
+        <form class="contact-form-home" action="https://formsubmit.co/info@thetrademarkhoop.com" method="POST" id="contactForm">
+          <input type="hidden" name="_captcha" value="true" />
+          <input type="hidden" name="_subject" value="Νέο μήνυμα από thetrademarkhoop.com" />
+          <input type="hidden" name="_next" value="https://www.thetrademarkhoop.com/" />
+          <input type="text" name="_honey" style="display:none" />
           <input type="text" name="name" placeholder="Όνομα" required />
           <input type="email" name="email" placeholder="Email" required />
+          <input type="tel" name="phone" placeholder="Τηλέφωνο (προαιρετικό)" />
           <textarea name="message" placeholder="Μήνυμα" required></textarea>
+          <label class="form-consent">
+            <input type="checkbox" id="consentCheck" required />
+            <span>Αποδέχομαι τους <a href="/p/trademark-hoop_26.html" target="_blank">Όρους Χρήσης</a> και την <a href="/p/trademark-hoop_26.html" target="_blank">Πολιτική Απορρήτου</a>. Συναινώ στη συλλογή και επεξεργασία των δεδομένων μου σύμφωνα με τον GDPR για τον σκοπό της επικοινωνίας.</span>
+          </label>
           <button type="submit">Αποστολή</button>
         </form>
       </div>

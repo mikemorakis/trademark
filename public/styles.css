@@ -872,6 +872,54 @@ img {
   resize: vertical;
 }
 
+.contact-form-home input[type="tel"] {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+}
+
+.contact-form-home input[type="tel"]::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+.contact-form-home input[type="tel"]:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+
+.form-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.form-consent input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--orange);
+  cursor: pointer;
+}
+
+.form-consent span {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.5);
+}
+
+.form-consent a {
+  color: var(--orange);
+  text-decoration: underline;
+}
+
 .contact-form-home button {
   background: var(--orange);
   color: var(--white);
