@@ -491,11 +491,19 @@ img {
   border-bottom: none;
 }
 
+.services-list li strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
 .services-list li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 22px;
+  top: 8px;
   width: 10px;
   height: 10px;
   background: var(--orange);
