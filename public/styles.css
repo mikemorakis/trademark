@@ -2047,13 +2047,28 @@ img {
     margin-bottom: 28px;
   }
 
+  .hero-email-form {
+    max-width: 100%;
+  }
+
+  .hero-email-form input[type="email"] {
+    font-size: 1rem;
+    padding: 16px 20px;
+  }
+
   .btn-hero-primary,
   .btn-hero-outline {
-    padding: 14px 32px;
-    font-size: 0.8rem;
-    width: 100%;
-    max-width: 300px;
+    padding: 11px 20px;
+    font-size: 0.72rem;
+    width: auto;
+    flex: 1;
+    justify-content: center;
     text-align: center;
+  }
+
+  .hero-buttons {
+    flex-direction: row;
+    gap: 10px;
   }
 
   .hero-trust {
