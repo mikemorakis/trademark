@@ -243,10 +243,14 @@ img {
 
 .hero-sub {
   font-family: var(--font-body);
-  font-size: 1.15rem;
-  color: rgba(255,255,255,0.85);
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.8);
   margin-bottom: 40px;
   font-weight: 300;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
 }
 
 .hero-buttons {
@@ -254,6 +258,31 @@ img {
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.hero-trust {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-trust li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+  font-weight: 400;
+}
+
+.hero-trust svg {
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.9);
 }
 
 .btn-hero-primary {
