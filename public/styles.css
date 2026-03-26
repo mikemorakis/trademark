@@ -276,13 +276,13 @@ img {
 
 .hero-email-form input[type="email"] {
   width: 100%;
-  padding: 14px 20px;
+  padding: 18px 24px;
   background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 10px;
   color: var(--white);
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   text-align: center;
   transition: border-color 0.3s, background 0.3s;
 }
@@ -335,10 +335,10 @@ img {
   gap: 8px;
   background: var(--white);
   color: var(--orange-dark);
-  padding: 16px 36px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: 6px;
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -358,10 +358,10 @@ img {
   gap: 8px;
   border: 2px solid var(--white);
   color: var(--white);
-  padding: 16px 36px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: 6px;
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
