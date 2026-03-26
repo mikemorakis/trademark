@@ -1,94 +1,205 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Sidebar from '../components/Sidebar.astro';
 
-const posts = [
+const faqItems = [
   {
-    title: 'Εμπορικό Σήμα: Σεμινάριο',
-    date: '4 Μαΐου 2024',
-    url: '/2024/05/emporikosimaseminario.html',
-    excerpt: 'Σεμινάριο εξειδικευμένου περιεχομένου σχετικά με το εμπορικό σήμα.',
+    question: 'Με συμφέρει η κατοχύρωση εμπορικού σήματος;',
+    answer: 'Η κατοχύρωση εμπορικού σήματος αποτελεί μια ιδιαίτερα συμφέρουσα επιλογή για κάθε επιχείρηση. Σύμφωνα με έρευνες, επιχειρήσεις που επενδύουν σε δικαιώματα διανοητικής ιδιοκτησίας παρουσιάζουν αυξημένα έσοδα ανά υπάλληλο κατά 55%. Η Ελλάδα προσφέρει τα χαμηλότερα τέλη καταχώρισης μεταξύ συγκρίσιμων ευρωπαϊκών χωρών, στα 100 ευρώ ανά κλάση.',
   },
   {
-    title: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΔΙΤΕ - Google Ads & Trademarks',
-    date: '7 Φεβρουαρίου 2024',
-    url: '/2024/02/adwords-google-trademark.html',
-    excerpt: 'Επιστημονική δημοσίευση στο νομικό περιοδικό Δίκαιο Τεχνολογίας & Επικοινωνίας (ΔΙΤΕ) της Νομικής Βιβλιοθήκης.',
+    question: 'Τι είναι το εμπορικό σήμα και τι μπορώ να κατοχυρώσω ως τέτοιο;',
+    answer: 'Σύμφωνα με τον νόμο 4679/2020, εμπορικό σήμα μπορεί να αποτελείται από λέξεις, ονόματα, σχέδια, γράμματα, αριθμούς, χρώματα, σχήμα προϊόντος ή συσκευασίας, ή ήχους, εφόσον μπορούν να διακρίνουν τα προϊόντα ή τις υπηρεσίες μιας επιχείρησης από εκείνα άλλων.',
   },
   {
-    title: 'Scientific Publication in European Intellectual Property Review',
-    date: '3 Ιανουαρίου 2024',
-    url: '/2024/01/european-intellectual-property-review.html',
-    excerpt: 'Publication in the European Intellectual Property Review (Sweet & Maxwell).',
+    question: 'Προστατεύομαι για πάντα; Σε ποιες περιοχές;',
+    answer: 'Η προστασία διαρκεί 10 έτη από την ημερομηνία κατάθεσης, με δυνατότητα ανανέωσης επ\' αόριστον. Οι επιλογές καταχώρισης περιλαμβάνουν: εθνικό σήμα (προστασία στην Ελλάδα), σήμα ΕΕ (προστασία σε όλα τα κράτη-μέλη) ή διεθνή καταχώριση (προστασία σε συγκεκριμένες χώρες).',
   },
   {
-    title: 'Scientific Publication in Kluwer Trademark Blog by Wolters Kluwer N.V.',
-    date: '3 Ιανουαρίου 2024',
-    url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html',
-    excerpt: 'Publication in the Kluwer Trademark Blog (Wolters Kluwer).',
+    question: 'Γιατί χρειάζομαι τη βοήθεια ενός ειδικού στα εμπορικά σήματα πριν την καταχώριση;',
+    answer: 'Η καταχώριση σήματος χωρίς προηγούμενη νομική μελέτη μπορεί να αποτελέσει "παγίδα πρώτης κατηγορίας" για τον σηματούχο. Τρίτοι μπορούν να αμφισβητήσουν το σήμα με αιτήσεις ακύρωσης, αγωγές ή ποινικές διώξεις. Η εξειδικευμένη συμβουλή εντοπίζει κινδύνους και αυξάνει σημαντικά τις πιθανότητες επιτυχούς άμυνας.',
   },
   {
-    title: 'Scientific Publication in Journal of Intellectual Property Law & Practice',
-    date: '7 Μαΐου 2023',
-    url: '/2023/05/journal-of-intellectual-property-law.html',
-    excerpt: 'Publication in the Journal of Intellectual Property Law & Practice (Oxford University Press).',
+    question: 'Έχω εμπορικό σήμα. Το καταχώρισα στο Μητρώο Σημάτων. Είμαι ασφαλής;',
+    answer: 'Όχι. Η καταχώριση εμπορικού σήματος δεν εγγυάται ότι τρίτοι δεν θα ζητήσουν ακύρωση, αποζημίωση ή ποινική δίωξη. Η ποιότητα της προεργασίας πριν την καταχώριση είναι κρίσιμη για τη μακροχρόνια ασφάλεια του σήματος.',
   },
   {
-    title: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΣΥΝΗΓΟΡΟΣ',
-    date: '26 Απριλίου 2023',
-    url: '/2023/04/blog-post.html',
-    excerpt: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΣΥΝΗΓΟΡΟΣ της Νομικής Βιβλιοθήκης.',
+    question: 'Κάποιος τρίτος χρησιμοποιεί μια ένδειξη ίδια ή παρόμοια με το σήμα μου. Τι μπορώ να κάνω;',
+    answer: 'Υπάρχουν πολλαπλές δυνατότητες: εξώδικη όχληση (πιο οικονομική αφετηρία), ασφαλιστικά μέτρα (αποτελεσματικά εντός 2-3 ημερών), κύρια αγωγή (αξίωση παύσης, καταστροφής προϊόντων, αποζημίωσης), αίτηση ακύρωσης, καθώς και ποινική δίωξη.',
   },
+  {
+    question: 'Αμέλησα και δεν καταχώρισα εμπορικό σήμα. Αυτό σημαίνει ότι δεν προστατεύομαι;',
+    answer: 'Η καταχώριση είναι συνιστώμενη πριν την εμπορική χρήση αλλά δεν αποτελεί τον μοναδικό μηχανισμό προστασίας. Μη καταχωρισμένα δικαιώματα προκύπτουν από συνεχή εμπορική χρήση. Ωστόσο, η καταχώριση παρέχει δικονομικά πλεονεκτήματα και πρόσβαση σε ειδικές ποινικές διατάξεις.',
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer,
+    },
+  })),
+};
+
+const stories = [
+  { title: 'Μια υπόθεση ελληνικών συμφερόντων: η κατοχύρωση εμπορικού σήματος και το συχνότερο λάθος κατά την καταχώριση', url: '/2022/01/kataxorisi-simatos-elegxos.html', source: 'Naftemporiki' },
+  { title: 'Αλλαγή δεδομένων από το Γενικό Δικαστήριο της ΕΕ: Χρήσιμα συμπεράσματα για τον ΟΒΙ', url: '/2021/10/OBI-SIMATA-EUIPO.html', source: 'OBI / EUIPO' },
+  { title: 'Οι σύγχρονες μελέτες για την κατοχύρωση εμπορικού σήματος', url: '/2022/06/katoxirosi-simatos-dhlwsh.html', source: 'HuffingtonPost' },
+  { title: 'Turkaegean: Ο Ατατούρκ και 11 σκέψεις', url: '/2022/07/emporiko-sima-onoma-turkaegean-euipo-katoxurosi.html', source: 'Analysis' },
+  { title: 'Το εμπορικό σήμα ως περιουσιακό στοιχείο: αριθμοί, προστασία και δύο προτάσεις', url: '/2021/11/emporiko-sima-dikigoros-kataxorisi-katoxurosi.html', source: 'Startup.gr' },
+  { title: 'Milan AC: Ένας αγώνας που δεν κερδήθηκε και ένα δίδαγμα', url: '/2022/01/emporiko-sima-EE-EUIPO.html', source: 'EUIPO Case' },
+  { title: 'Όταν το Netflix επιχείρησε να καταχωρίσει το ηχητικό του ως σήμα ΕΕ', url: '/2022/04/trademark-netflix-euipo.html', source: 'TheTotalBusiness' },
+  { title: 'Η κατοχύρωση του νέου σήματος της Juventus', url: '/2022/08/trademark-simata-dikigoros-juv.html', source: 'Capital.gr' },
 ];
 
 const academicPubs = [
-  {
-    title: 'European Intellectual Property Review (Sweet & Maxwell)',
-    url: '/2024/01/european-intellectual-property-review.html',
-  },
-  {
-    title: 'Kluwer Trademark Blog (Wolters Kluwer)',
-    url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html',
-  },
-  {
-    title: 'Journal of Intellectual Property Law & Practice (Oxford University Press)',
-    url: '/2023/05/journal-of-intellectual-property-law.html',
-  },
+  { title: 'European Intellectual Property Review', publisher: 'Sweet & Maxwell', url: '/2024/01/european-intellectual-property-review.html' },
+  { title: 'Kluwer Trademark Blog', publisher: 'Wolters Kluwer N.V.', url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html' },
+  { title: 'Journal of Intellectual Property Law & Practice', publisher: 'Oxford University Press', url: '/2023/05/journal-of-intellectual-property-law.html' },
+  { title: 'Ο κίνδυνος σύγχυσης στο δίκαιο του σήματος', publisher: 'Νομική Βιβλιοθήκη (Monograph)', url: '/2022/09/dikaio-simatwn.html' },
+  { title: 'Δίκαιο Τεχνολογίας & Επικοινωνίας (ΔΙΤΕ)', publisher: 'Νομική Βιβλιοθήκη', url: '/2024/02/adwords-google-trademark.html' },
+  { title: 'ΣΥΝΗΓΟΡΟΣ', publisher: 'Νομική Βιβλιοθήκη', url: '/2023/04/blog-post.html' },
 ];
 ---
 
-<BaseLayout title="Home" showHero={true}>
-  <div class="main-content">
-    <div class="content-area">
-      {posts.map(post => (
-        <article class="post-card">
-          <div class="post-body">
-            <h2 class="post-title">
-              <a href={post.url}>{post.title}</a>
-            </h2>
-            <div class="post-meta">
-              <span>{post.date}</span>
-              <span>Giannis Psarakis</span>
-            </div>
-            <p class="post-excerpt">{post.excerpt}</p>
-            <a href={post.url} class="read-more">Read more &rarr;</a>
-          </div>
-        </article>
-      ))}
+<BaseLayout title="Κατοχύρωση Εμπορικού Σήματος" description="Κατοχύρωση εμπορικού σήματος - Δικηγόρος εμπορικών σημάτων | The Trademark Hoop - Psarakis | Kephalas Law Firm. Advice. Registration. Litigation.">
+  <!-- FAQ Schema for SEO -->
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
 
-      <div class="academic-section">
-        <h2>Academic Contributions</h2>
+  <!-- SECTION 1: Hero -->
+  <section class="hero-home">
+    <div class="hero-content">
+      <div class="hero-tagline">
+        <span class="hero-line">Hoop it.</span>
+        <span class="hero-line">Don't get hooped.</span>
+        <span class="hero-line hero-line-gap">Legally.</span>
+      </div>
+      <p class="hero-services">[ Advice.Registration.Litigation ]</p>
+      <h1 class="hero-h1">Κατοχύρωση εμπορικού σήματος</h1>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Trusting the Experts -->
+  <section class="section-services" id="services">
+    <div class="container">
+      <div class="services-header">
+        <span class="section-label">The Trademark Hoop:</span>
+        <h2>Trusting the Experts</h2>
+      </div>
+      <div class="services-grid">
+        <div class="services-intro">
+          <p>Το Trademark Hoop είναι το trademark hub της Δικηγορικής Εταιρείας Ψαράκης|Κεφαλάς. Στο Trademark Hoop ασχολούμαστε αποκλειστικά με υποθέσεις εμπορικού σήματος.</p>
+          <p>Ενδεικτικά, οι υπηρεσίες οι οποίες παρέχουμε είναι οι εξής:</p>
+          <ul class="services-list">
+            <li>Κατάθεση, κατόπιν πλήρους νομικού προελέγχου, δηλώσεων εμπορικών σημάτων σε εθνικό, ενωσιακό (εμπορικό σήμα της Ε.Ε.) και διεθνές επίπεδο (π.χ. ΗΠΑ, Ηνωμένο Βασίλειο, Κίνα κτλ).</li>
+            <li>Εφόσον είναι αναγκαίο, κατάλληλη προσαρμογή της ένδειξης από επαγγελματίες γραφίστες με τους οποίους διατηρούμε σταθερή συνεργασία, ανά την Ελλάδα, ούτως ώστε να επιτυγχάνεται το βέλτιστο νομικό και εμπορικό αποτέλεσμα.</li>
+            <li>Εξωδικαστική αντιμετώπιση υποθέσεων που αφορούν σε προσβολή εμπορικού σήματος.</li>
+            <li>Ανάληψη υποθέσεων που αφορούν σε δικαστικές διενέξεις στο πεδίο των εμπορικών σημάτων, σε αστικό, σε διοικητικό και σε ποινικό επίπεδο.</li>
+            <li>Σύνταξη γνωμοδοτήσεων σε σύνθετα ζητήματα του δικαίου των εμπορικών σημάτων, για δικαστική ή ιδία χρήση.</li>
+          </ul>
+        </div>
+        <div class="services-summary">
+          <p>Απόλυτη εξειδίκευση στα ζητήματα εμπορικών σημάτων, συνεχής παρακολούθηση των εξελίξεων, ενεργή παρουσία στην ακαδημαϊκή και επιστημονική κοινότητα. Όλα αυτά συγκεντρωμένα σε υπηρεσίες προσαρμοσμένες στις ιδιαίτερες ανάγκες της κάθε περίπτωσης.</p>
+          <a href="/p/we-do.html" class="btn-primary">Μάθετε περισσότερα</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Academic Contributions -->
+  <section class="section-academic" id="academic">
+    <div class="container">
+      <h2 class="section-title">Academic Contributions</h2>
+      <p class="section-subtitle">Δημοσιεύσεις του Γιάννη Ψαράκη σε διεθνή και ελληνικά νομικά περιοδικά</p>
+      <div class="academic-grid">
         {academicPubs.map(pub => (
-          <div class="academic-card">
-            <div>
-              <h4><a href={pub.url}>{pub.title}</a></h4>
-              <p>by Giannis Psarakis</p>
-            </div>
-          </div>
+          <a href={pub.url} class="academic-item">
+            <h4>{pub.title}</h4>
+            <span class="publisher">{pub.publisher}</span>
+          </a>
         ))}
       </div>
     </div>
+  </section>
 
-    <Sidebar />
-  </div>
+  <!-- SECTION 4: TM Stories -->
+  <section class="section-stories" id="stories">
+    <div class="container">
+      <h2 class="section-title">TM Stories</h2>
+      <p class="section-subtitle">Αρθρογραφία και αναλύσεις σε θέματα εμπορικών σημάτων</p>
+      <div class="stories-grid-home">
+        {stories.map(story => (
+          <a href={story.url} class="story-item">
+            <span class="story-source-badge">{story.source}</span>
+            <h4>{story.title}</h4>
+          </a>
+        ))}
+      </div>
+      <div class="center-cta">
+        <a href="/p/1.html" class="btn-outline">Δείτε όλα τα TM Stories</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: FAQ with Schema -->
+  <section class="section-faq" id="faq">
+    <div class="container">
+      <h2 class="section-title">Συχνές Ερωτήσεις (FAQ)</h2>
+      <div class="faq-list">
+        {faqItems.map((item, i) => (
+          <details class="faq-accordion" open={i === 0}>
+            <summary>{item.question}</summary>
+            <div class="faq-answer">
+              <p>{item.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+      <div class="center-cta">
+        <a href="/p/trademark-hoop.html" class="btn-outline">Δείτε όλες τις ερωτήσεις</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: Contact -->
+  <section class="section-contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Επικοινωνήστε μαζί μας</h2>
+          <p class="contact-desc">Συμπληρώστε τη φόρμα ή επικοινωνήστε απευθείας μαζί μας.</p>
+          <div class="contact-details">
+            <div class="contact-detail">
+              <strong>Διεύθυνση</strong>
+              <span>Λυκαβηττού 2, Κολωνάκι</span>
+            </div>
+            <div class="contact-detail">
+              <strong>Τηλέφωνο</strong>
+              <span>213 046 4985</span>
+            </div>
+            <div class="contact-detail">
+              <strong>Κινητό</strong>
+              <span>693 27 87 671</span>
+            </div>
+            <div class="contact-detail">
+              <strong>Email</strong>
+              <a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form-home" action="https://formsubmit.co/info@thetrademarkhoop.com" method="POST">
+          <input type="text" name="name" placeholder="Όνομα" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <textarea name="message" placeholder="Μήνυμα" required></textarea>
+          <button type="submit">Αποστολή</button>
+        </form>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

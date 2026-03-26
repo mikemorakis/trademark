@@ -18,6 +18,7 @@ import '../styles/global.css';
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="canonical" href={Astro.url.href} />
+  <slot name="head" />
 
   <!-- Schema.org -->
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -41,7 +42,7 @@ import '../styles/global.css';
   <header class="site-header">
     <div class="header-inner">
       <a href="/" class="site-logo">
-        <span class="logo-text">The <span class="logo-accent">Trademark</span> Hoop</span>
+        <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" />
       </a>
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -56,16 +57,6 @@ import '../styles/global.css';
       </nav>
     </div>
   </header>
-
-  {showHero && (
-    <section class="hero">
-      <div class="container">
-        <h1>The Trademark Hoop</h1>
-        <p class="tagline">Hoop it. Don't get hooped. Legally.</p>
-        <p class="services-line">Advice &bull; Registration &bull; Litigation</p>
-      </div>
-    </section>
-  )}
 
   <slot />
 
