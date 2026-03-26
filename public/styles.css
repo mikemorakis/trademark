@@ -1559,7 +1559,7 @@ img {
     margin-top: 0;
     padding: 0;
     z-index: 999;
-    overflow: hidden;
+    overflow-y: auto;
   }
 
   .main-nav.open {
@@ -1582,7 +1582,7 @@ img {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px 24px 28px;
+    padding: 16px 24px 40px;
     margin-top: 0;
   }
 
