@@ -1546,7 +1546,7 @@ img {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 3px;
+  border-radius: 20px;
 }
 
 .footer-grid {
@@ -2058,16 +2058,17 @@ img {
 
   .btn-hero-primary,
   .btn-hero-outline {
-    padding: 11px 20px;
-    font-size: 0.72rem;
-    width: auto;
-    flex: 1;
+    padding: 14px 24px;
+    font-size: 0.75rem;
+    width: 100%;
+    max-width: 300px;
     justify-content: center;
     text-align: center;
   }
 
   .hero-buttons {
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
   }
 
