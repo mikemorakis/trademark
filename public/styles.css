@@ -626,7 +626,11 @@ img {
 /* Section 5: FAQ */
 .section-faq {
   padding: 80px 0;
-  background: var(--white);
+  background: linear-gradient(160deg, #ff9040 0%, #fb6412 30%, #e55a0e 60%, #c44400 100%);
+}
+
+.section-faq .section-title {
+  color: var(--white);
 }
 
 .faq-list {
@@ -635,7 +639,7 @@ img {
 }
 
 .faq-accordion {
-  background: var(--orange);
+  background: var(--white);
   border-radius: 10px;
   margin-bottom: 12px;
   overflow: hidden;
@@ -645,7 +649,7 @@ img {
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--white);
+  color: var(--navy);
   padding: 20px 24px;
   cursor: pointer;
   list-style: none;
@@ -663,7 +667,7 @@ img {
   content: '+';
   font-size: 1.4rem;
   font-weight: 300;
-  color: var(--white);
+  color: var(--orange);
   transition: transform 0.3s;
   flex-shrink: 0;
   margin-left: 16px;
@@ -674,7 +678,7 @@ img {
 }
 
 .faq-accordion summary:hover {
-  background: rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.02);
 }
 
 .faq-answer {
@@ -684,7 +688,17 @@ img {
 .faq-answer p {
   font-size: 0.92rem;
   line-height: 1.8;
-  color: rgba(255,255,255,0.85);
+  color: var(--text-gray);
+}
+
+.section-faq .btn-outline {
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.section-faq .btn-outline:hover {
+  background: var(--white);
+  color: var(--orange);
 }
 
 /* Section 6: Contact */
