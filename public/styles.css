@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap');
 
 :root {
   --navy: #12395d;
@@ -13,7 +13,7 @@
   --text-gray: #666666;
   --text-dark: #333333;
   --font-heading: 'Comfortaa', cursive;
-  --font-body: 'Outfit', sans-serif;
+  --font-body: Arial, Helvetica, sans-serif;
 }
 
 *, *::before, *::after {
