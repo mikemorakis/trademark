@@ -480,8 +480,7 @@ img {
 }
 
 .services-list li {
-  position: relative;
-  padding: 14px 0 14px 28px;
+  padding: 14px 0;
   border-bottom: 1px solid var(--gray);
   font-size: 0.95rem;
   line-height: 1.7;
@@ -494,20 +493,10 @@ img {
 .services-list li strong {
   display: block;
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--navy);
   margin-bottom: 4px;
-}
-
-.services-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 10px;
-  height: 10px;
-  background: var(--orange);
-  border-radius: 50%;
 }
 
 .services-summary {
