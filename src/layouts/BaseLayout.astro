@@ -166,6 +166,54 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
     </div>
   </footer>
 
+  <!-- Cookie Consent Bar -->
+  <div class="cookie-bar" id="cookieBar">
+    <div class="cookie-bar-inner">
+      <div class="cookie-bar-content">
+        <div class="cookie-bar-header">
+          <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" class="cookie-logo" />
+          <h4>Ρυθμίσεις Απορρήτου & Cookies</h4>
+        </div>
+        <p>Χρησιμοποιούμε cookies για τη βελτίωση της εμπειρίας σας, την ανάλυση επισκεψιμότητας και την προβολή εξατομικευμένου περιεχομένου. Μπορείτε να διαχειριστείτε τις προτιμήσεις σας παρακάτω. Για περισσότερες πληροφορίες, δείτε την <a href="/p/trademark-hoop_26.html">Πολιτική Cookies</a> και την <a href="/p/trademark-hoop_26.html">Πολιτική Απορρήτου</a>.</p>
+        <div class="cookie-options" id="cookieOptions" style="display:none;">
+          <label class="cookie-toggle">
+            <input type="checkbox" checked disabled />
+            <span class="cookie-label">
+              <strong>Απαραίτητα</strong>
+              <small>Απαιτούνται για τη βασική λειτουργία του ιστότοπου. Δεν μπορούν να απενεργοποιηθούν.</small>
+            </span>
+          </label>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="cookieAnalytics" checked />
+            <span class="cookie-label">
+              <strong>Αναλυτικά</strong>
+              <small>Μας βοηθούν να κατανοήσουμε πώς χρησιμοποιείτε τον ιστότοπο (Google Analytics).</small>
+            </span>
+          </label>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="cookieMarketing" />
+            <span class="cookie-label">
+              <strong>Μάρκετινγκ</strong>
+              <small>Χρησιμοποιούνται για εξατομικευμένες διαφημίσεις και remarketing.</small>
+            </span>
+          </label>
+          <label class="cookie-toggle">
+            <input type="checkbox" id="cookieFunctional" checked />
+            <span class="cookie-label">
+              <strong>Λειτουργικά</strong>
+              <small>Βελτιώνουν τη λειτουργικότητα, όπως ενσωματωμένα βίντεο και χάρτες.</small>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="cookie-bar-actions">
+        <button class="cookie-btn-settings" id="cookieToggleOptions">Ρυθμίσεις</button>
+        <button class="cookie-btn-reject" id="cookieReject">Απόρριψη Όλων</button>
+        <button class="cookie-btn-accept" id="cookieAccept">Αποδοχή Όλων</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.getElementById('hamburger')?.addEventListener('click', () => {
       document.getElementById('mainNav')?.classList.add('open');
@@ -180,6 +228,40 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
         header.classList.toggle('scrolled', window.scrollY > 50);
       });
     }
+
+    // Cookie Consent
+    (function() {
+      const bar = document.getElementById('cookieBar');
+      const opts = document.getElementById('cookieOptions');
+      if (localStorage.getItem('cookieConsent')) { bar.style.display = 'none'; return; }
+      bar.style.display = 'flex';
+
+      document.getElementById('cookieToggleOptions')?.addEventListener('click', () => {
+        opts.style.display = opts.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.getElementById('cookieAccept')?.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', JSON.stringify({
+          necessary: true,
+          analytics: true,
+          marketing: true,
+          functional: true,
+          date: new Date().toISOString()
+        }));
+        bar.style.display = 'none';
+      });
+
+      document.getElementById('cookieReject')?.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', JSON.stringify({
+          necessary: true,
+          analytics: false,
+          marketing: false,
+          functional: false,
+          date: new Date().toISOString()
+        }));
+        bar.style.display = 'none';
+      });
+    })();
   </script>
 </body>
 </html>
