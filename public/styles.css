@@ -443,6 +443,16 @@ img {
   color: var(--white);
 }
 
+.btn-outline-light {
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.btn-outline-light:hover {
+  background: var(--white);
+  color: var(--navy);
+}
+
 /* Section 2: Services */
 .section-services {
   padding: 80px 0;
