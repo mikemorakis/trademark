@@ -269,6 +269,34 @@ img {
   line-height: 1.7;
 }
 
+.hero-email-form {
+  max-width: 400px;
+  margin: 0 auto 20px;
+}
+
+.hero-email-form input[type="email"] {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-align: center;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.hero-email-form input[type="email"]::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.hero-email-form input[type="email"]:focus {
+  outline: none;
+  border-color: var(--white);
+  background: rgba(255,255,255,0.2);
+}
+
 .hero-buttons {
   display: flex;
   gap: 16px;
