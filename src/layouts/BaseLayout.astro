@@ -1,0 +1,108 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  showHero?: boolean;
+}
+
+const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Registration. Litigation.', showHero = false } = Astro.props;
+import '../styles/global.css';
+---
+
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <title>{title} | The Trademark Hoop</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="canonical" href={Astro.url.href} />
+
+  <!-- Schema.org -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    "name": "The Trademark Hoop",
+    "description": "Specialized trademark law firm - Psarakis | Kephalas Law Firm",
+    "url": "https://www.thetrademarkhoop.com",
+    "telephone": "+302130464985",
+    "email": "info@thetrademarkhoop.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Lykavittou 2, Kolonaki",
+      "addressLocality": "Athens",
+      "addressCountry": "GR"
+    }
+  })} />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="site-logo">
+        <span class="logo-text">The <span class="logo-accent">Trademark</span> Hoop</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <a href="/p/trademark-hoop_26.html">The Hoop</a>
+        <a href="/p/1.html">TM Stories+</a>
+        <a href="/p/we-do.html">Things We Are Good At</a>
+        <a href="/p/trademark-hoop.html">FAQ</a>
+        <a href="/p/who.html">About</a>
+        <a href="/p/blog-page_8.html">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  {showHero && (
+    <section class="hero">
+      <div class="container">
+        <h1>The Trademark Hoop</h1>
+        <p class="tagline">Hoop it. Don't get hooped. Legally.</p>
+        <p class="services-line">Advice &bull; Registration &bull; Litigation</p>
+      </div>
+    </section>
+  )}
+
+  <slot />
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>The Trademark Hoop</h4>
+        <p>Hoop it. Don't get hooped. Legally.</p>
+        <p>A Psarakis | Kephalas Law Firm IP Hub</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="/p/trademark-hoop_26.html">The Hoop</a>
+        <a href="/p/we-do.html">Things We Are Good At</a>
+        <a href="/p/trademark-hoop.html">FAQ</a>
+        <a href="/p/who.html">About</a>
+        <a href="/p/blog-page_8.html">Contact Us</a>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <p>Lykavittou 2, Kolonaki</p>
+        <p>T: 213 046 4985</p>
+        <p>M: 693 27 87 671</p>
+        <p><a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} The Trademark Hoop | Psarakis | Kephalas Law Firm. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('hamburger')?.addEventListener('click', () => {
+      document.getElementById('mainNav')?.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+---
+
+<BaseLayout title="Contact Us" description="Επικοινωνήστε μαζί μας - The Trademark Hoop">
+  <div class="main-content">
+    <div class="content-area">
+      <div class="page-content">
+        <h1>Επικοινωνία</h1>
+
+        <div class="contact-info-box">
+          <h3>The Trademark Hoop</h3>
+          <p>Λυκαβηττού 2, Κολωνάκι</p>
+          <p>T: 213 046 4985</p>
+          <p>M: 693 27 87 671</p>
+          <p><a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a></p>
+        </div>
+
+        <h2>Επικοινωνήστε μαζί μας συμπληρώνοντας την παρακάτω φόρμα</h2>
+
+        <form class="contact-page-form" action="https://formspree.io/f/info@thetrademarkhoop.com" method="POST">
+          <input type="text" name="name" placeholder="Όνομα" />
+          <input type="email" name="email" placeholder="Email *" required />
+          <textarea name="message" placeholder="Μήνυμα *" required></textarea>
+          <button type="submit">Αποστολή</button>
+        </form>
+      </div>
+    </div>
+
+    <Sidebar />
+  </div>
+</BaseLayout>

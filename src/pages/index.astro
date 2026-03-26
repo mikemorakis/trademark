@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+const posts = [
+  {
+    title: 'Εμπορικό Σήμα: Σεμινάριο',
+    date: '4 Μαΐου 2024',
+    url: '/2024/05/emporikosimaseminario.html',
+    excerpt: 'Σεμινάριο εξειδικευμένου περιεχομένου σχετικά με το εμπορικό σήμα.',
+  },
+  {
+    title: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΔΙΤΕ - Google Ads & Trademarks',
+    date: '7 Φεβρουαρίου 2024',
+    url: '/2024/02/adwords-google-trademark.html',
+    excerpt: 'Επιστημονική δημοσίευση στο νομικό περιοδικό Δίκαιο Τεχνολογίας & Επικοινωνίας (ΔΙΤΕ) της Νομικής Βιβλιοθήκης.',
+  },
+  {
+    title: 'Scientific Publication in European Intellectual Property Review',
+    date: '3 Ιανουαρίου 2024',
+    url: '/2024/01/european-intellectual-property-review.html',
+    excerpt: 'Publication in the European Intellectual Property Review (Sweet & Maxwell).',
+  },
+  {
+    title: 'Scientific Publication in Kluwer Trademark Blog by Wolters Kluwer N.V.',
+    date: '3 Ιανουαρίου 2024',
+    url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html',
+    excerpt: 'Publication in the Kluwer Trademark Blog (Wolters Kluwer).',
+  },
+  {
+    title: 'Scientific Publication in Journal of Intellectual Property Law & Practice',
+    date: '7 Μαΐου 2023',
+    url: '/2023/05/journal-of-intellectual-property-law.html',
+    excerpt: 'Publication in the Journal of Intellectual Property Law & Practice (Oxford University Press).',
+  },
+  {
+    title: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΣΥΝΗΓΟΡΟΣ',
+    date: '26 Απριλίου 2023',
+    url: '/2023/04/blog-post.html',
+    excerpt: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΣΥΝΗΓΟΡΟΣ της Νομικής Βιβλιοθήκης.',
+  },
+];
+
+const academicPubs = [
+  {
+    title: 'European Intellectual Property Review (Sweet & Maxwell)',
+    url: '/2024/01/european-intellectual-property-review.html',
+  },
+  {
+    title: 'Kluwer Trademark Blog (Wolters Kluwer)',
+    url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html',
+  },
+  {
+    title: 'Journal of Intellectual Property Law & Practice (Oxford University Press)',
+    url: '/2023/05/journal-of-intellectual-property-law.html',
+  },
+];
+---
+
+<BaseLayout title="Home" showHero={true}>
+  <div class="main-content">
+    <div class="content-area">
+      {posts.map(post => (
+        <article class="post-card">
+          <div class="post-body">
+            <h2 class="post-title">
+              <a href={post.url}>{post.title}</a>
+            </h2>
+            <div class="post-meta">
+              <span>{post.date}</span>
+              <span>Giannis Psarakis</span>
+            </div>
+            <p class="post-excerpt">{post.excerpt}</p>
+            <a href={post.url} class="read-more">Read more &rarr;</a>
+          </div>
+        </article>
+      ))}
+
+      <div class="academic-section">
+        <h2>Academic Contributions</h2>
+        {academicPubs.map(pub => (
+          <div class="academic-card">
+            <div>
+              <h4><a href={pub.url}>{pub.title}</a></h4>
+              <p>by Giannis Psarakis</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <Sidebar />
+  </div>
+</BaseLayout>

@@ -1,0 +1,78 @@
+---
+const tags = [
+  { name: 'Ανακοπή', slug: 'opposition' },
+  { name: 'Απομίμηση', slug: 'imitation' },
+  { name: 'Διαδικασία', slug: 'procedure' },
+  { name: 'Δικηγόρος', slug: 'lawyer' },
+  { name: 'Εξέταση', slug: 'examination' },
+  { name: 'Εμπορικά Σήματα', slug: 'trademarks' },
+  { name: 'Σήματα ΕΕ', slug: 'eu-trademarks' },
+  { name: 'Ιστοσελίδες', slug: 'websites' },
+  { name: 'Κατάθεση', slug: 'filing' },
+  { name: 'Καταχώριση', slug: 'registration' },
+  { name: 'Προστασία', slug: 'protection' },
+  { name: 'Κίνδυνος Σύγχυσης', slug: 'confusion-risk' },
+  { name: 'Μορφές Προσβολής', slug: 'infringement-forms' },
+  { name: 'Φημισμένα Σήματα', slug: 'renowned-marks' },
+  { name: 'Domain', slug: 'domain' },
+  { name: 'EUIPO', slug: 'euipo' },
+  { name: 'Netflix', slug: 'netflix' },
+  { name: 'Juventus', slug: 'juventus' },
+  { name: 'La Liga', slug: 'la-liga' },
+  { name: 'Turkaegean', slug: 'turkaegean' },
+];
+
+const popularPosts = [
+  {
+    title: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΔΙΤΕ',
+    date: '7 Φεβρουαρίου 2024',
+    url: '/2024/02/adwords-google-trademark.html',
+  },
+  {
+    title: 'Επιστημονική δημοσίευση στο νομικό περιοδικό ΣΥΝΗΓΟΡΟΣ',
+    date: '26 Απριλίου 2023',
+    url: '/2023/04/blog-post.html',
+  },
+  {
+    title: 'Επιστημονική δημοσίευση στο Kluwer Trademark Blog',
+    date: '3 Ιανουαρίου 2024',
+    url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html',
+  },
+];
+---
+
+<aside class="sidebar">
+  <!-- Contact Form -->
+  <div class="sidebar-widget">
+    <h3>Contact</h3>
+    <form class="contact-form" action="https://formspree.io/f/info@thetrademarkhoop.com" method="POST">
+      <input type="text" name="name" placeholder="Name" />
+      <input type="email" name="email" placeholder="Email *" required />
+      <textarea name="message" placeholder="Message *" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <!-- Popular Posts -->
+  <div class="sidebar-widget">
+    <h3>Popular Posts</h3>
+    {popularPosts.map(post => (
+      <div class="popular-post">
+        <div class="post-info">
+          <h4><a href={post.url}>{post.title}</a></h4>
+          <span class="date">{post.date}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Tags Cloud -->
+  <div class="sidebar-widget">
+    <h3>Tags</h3>
+    <div class="tags-cloud">
+      {tags.map(tag => (
+        <a href={`/search?q=${tag.slug}`}>{tag.name}</a>
+      ))}
+    </div>
+  </div>
+</aside>

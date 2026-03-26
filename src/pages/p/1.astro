@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const stories = [
+  {
+    title: 'Υπόθεση ελληνικού ενδιαφέροντος: Καταχώριση σήματος και το πιο συνηθισμένο σφάλμα κατά την κατάθεση της ένδειξης',
+    source: 'Naftemporiki',
+    url: '/2022/01/kataxorisi-simatos-elegxos.html',
+  },
+  {
+    title: 'Αλλαγή πρακτικής από το Γενικό Δικαστήριο ΕΕ (ΔΕΕ): Χρήσιμα συμπεράσματα για τον ΟΒΙ και τους επιχειρηματικούς συμβούλους',
+    source: 'OBI',
+    url: '/2021/10/OBI-SIMATA-EUIPO.html',
+  },
+  {
+    title: 'Σύγχρονες Μελέτες για την Προστασία Εμπορικού Σήματος',
+    source: 'Huffington Post',
+    url: '/2022/06/katoxirosi-simatos-dhlwsh.html',
+  },
+  {
+    title: 'Turkaegean: Ο Ατατούρκ και 11 Σκέψεις',
+    source: '',
+    url: '/2022/07/emporiko-sima-onoma-turkaegean-euipo-katoxurosi.html',
+  },
+  {
+    title: 'Το Εμπορικό Σήμα ως Επιχειρηματικό Περιουσιακό Στοιχείο: Αριθμοί, Προστασία και Δύο Προτάσεις',
+    source: 'Startup.gr',
+    url: '/2021/11/emporiko-sima-dikigoros-kataxorisi-katoxurosi.html',
+  },
+  {
+    title: 'Milan AC: Μια μάχη που δεν κερδήθηκε και ένα μάθημα για την προστασία σημάτων ΕΕ',
+    source: '',
+    url: '/2022/01/emporiko-sima-EE-EUIPO.html',
+  },
+  {
+    title: 'Κατάθεση Σήματος: Σε τι εξυπηρετεί και όσα πρέπει να γνωρίζετε',
+    source: '',
+    url: '/2021/11/onoma-simata-kataxorisi-dikigoros.html',
+  },
+  {
+    title: 'Προσβολή Εμπορικού Σήματος: Η πιο συνηθισμένη περίπτωση (Μέρος Ι)',
+    source: 'Epixeiro.gr',
+    url: '/2021/11/paraviasi-sima-dikigoros-prostasia.html',
+  },
+  {
+    title: 'Προσβολή Εμπορικού Σήματος: Η πιο συνηθισμένη περίπτωση (Μέρος ΙΙ)',
+    source: 'Epixeiro.gr',
+    url: '/2021/11/sima-dikigoros-prosvoli-katoxurosi.html',
+  },
+  {
+    title: 'Καταχώριση Σήματος ΕΕ (EUTM) και Άμυνα έναντι Πιθανής Ανακοπής',
+    source: '',
+    url: '/2022/03/sima-tis-europaikis-enwsis.html',
+  },
+  {
+    title: 'Η μεγάλη έξοδος της Ρωσίας από την αγορά και η Πνευματική Ιδιοκτησία ως όπλο',
+    source: 'Oikonomia.gr',
+    url: '/2022/03/emporiko-sima-patentes-polemos.html',
+  },
+  {
+    title: 'EUIPO – Η La Liga σκόραρε 1',
+    source: 'OT.gr',
+    url: '/2021/11/kataxwrisi-sima-euipo.html',
+  },
+  {
+    title: 'Προσβολή Εμπορικού Σήματος: Η ευρύτερη δυνατή προστασία - το φημισμένο σήμα',
+    source: 'Lawnet.gr',
+    url: '/2021/11/prostasia-sima-trademark.html',
+  },
+  {
+    title: 'Φάκελος: Κατάθεση Σήματος - Πότε προσβάλλεται το σήμα σας;',
+    source: '',
+    url: '/2021/10/prosvoli-emporikou-simatos.html',
+  },
+  {
+    title: 'Κατοχύρωση Domain Name ως Εμπορικό Σήμα',
+    source: '',
+    url: '/2022/06/katoxurwsi-domain-name-kai-emporiko-sima.html',
+  },
+  {
+    title: 'Κατάθεση Σήματος: Η διαδικασία και γιατί η προστασία επωνυμίας ωφελεί τις επιχειρήσεις',
+    source: '',
+    url: '/2022/01/kataxwrisi-onoma-katoxurosi-sima-logo.html',
+  },
+  {
+    title: 'Όταν το Netflix επιχείρησε να καταχωρίσει τον χαρακτηριστικό (πλέον;) ήχο εκκίνησης ως σήμα ΕΕ',
+    source: '',
+    url: '/2022/04/trademark-netflix-euipo.html',
+  },
+  {
+    title: 'Ο Ουκρανικός πόλεμος, ξένα κράτη και Peppa Pig',
+    source: '',
+    url: '/2022/03/russia-polemos-trademark.html',
+  },
+  {
+    title: 'Η νέα καταχώριση σήματος της Juventus και η σημασία γνώσης πρόσφατης νομολογίας',
+    source: '',
+    url: '/2022/08/trademark-simata-dikigoros-juv.html',
+  },
+  {
+    title: 'Κατοχύρωση λογοτύπου ως Εμπορικό Σήμα: Η απαραίτητη προσοχή κατά την κατάθεση',
+    source: '',
+    url: '/2021/12/katoxirosi-simatos-onomatos.html',
+  },
+  {
+    title: 'Το περιστατικό με τη γιαγιά στα Lidl, μια φήμη και ένα... μάθημα',
+    source: '',
+    url: '/2022/03/branding-marketing.html',
+  },
+  {
+    title: 'Προστασία σήματος ΕΕ και εθνικού: Ο απαραίτητος έλεγχος πριν την κατάθεση σε EUIPO και ΟΒΙ',
+    source: '',
+    url: '/2021/09/EUIPO-OBI-SIMA-ELEGXOS-DIKIGOROS.html',
+  },
+];
+---
+
+<BaseLayout title="TM Stories+" description="Ιστορίες εμπορικών σημάτων - The Trademark Hoop">
+  <div class="main-content">
+    <div class="content-area">
+      <div class="page-content">
+        <h1>TM Stories+</h1>
+        <div class="stories-grid">
+          {stories.map(story => (
+            <div class="story-card">
+              <div class="story-body">
+                <h4><a href={story.url}>{story.title}</a></h4>
+                {story.source && <span class="story-source">{story.source}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <Sidebar />
+  </div>
+</BaseLayout>
