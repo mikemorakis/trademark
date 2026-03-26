@@ -2,10 +2,10 @@
 interface Props {
   title: string;
   description?: string;
-  showHero?: boolean;
+  transparentHeader?: boolean;
 }
 
-const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Registration. Litigation.', showHero = false } = Astro.props;
+const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Registration. Litigation.', transparentHeader = false } = Astro.props;
 import '../styles/global.css';
 ---
 
@@ -39,7 +39,7 @@ import '../styles/global.css';
 </head>
 <body>
   <!-- Header -->
-  <header class="site-header">
+  <header class={`site-header${transparentHeader ? ' transparent' : ''}`} id="siteHeader">
     <div class="header-inner">
       <a href="/" class="site-logo">
         <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" />
@@ -93,6 +93,13 @@ import '../styles/global.css';
     document.getElementById('hamburger')?.addEventListener('click', () => {
       document.getElementById('mainNav')?.classList.toggle('open');
     });
+
+    const header = document.getElementById('siteHeader');
+    if (header?.classList.contains('transparent')) {
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > 50);
+      });
+    }
   </script>
 </body>
 </html>
