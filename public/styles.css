@@ -270,8 +270,8 @@ img {
 }
 
 .hero-email-form {
-  max-width: 400px;
-  margin: 0 auto 20px;
+  max-width: 520px;
+  margin: 0 auto 16px;
 }
 
 .hero-email-form input[type="email"] {
@@ -330,7 +330,9 @@ img {
 }
 
 .btn-hero-primary {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: var(--white);
   color: var(--orange-dark);
   padding: 16px 36px;
@@ -351,7 +353,9 @@ img {
 }
 
 .btn-hero-outline {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   border: 2px solid var(--white);
   color: var(--white);
   padding: 16px 36px;
