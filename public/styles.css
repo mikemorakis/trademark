@@ -10,10 +10,10 @@
   --off-white: #fafafa;
   --light-gray: #f3f4f6;
   --gray: #d1d5db;
-  --text-gray: #6b7280;
+  --text-gray: #4b5563;
   --text-dark: #1f2937;
-  --font-heading: Tahoma, Geneva, sans-serif;
-  --font-body: Tahoma, Geneva, sans-serif;
+  --font-heading: Verdana, Geneva, sans-serif;
+  --font-body: Verdana, Geneva, sans-serif;
 }
 
 *, *::before, *::after {
@@ -430,7 +430,7 @@ img {
 
 .section-subtitle {
   text-align: center;
-  color: var(--text-gray);
+  color: var(--text-dark);
   font-size: 0.92rem;
   margin-bottom: 48px;
   line-height: 1.6;
@@ -440,7 +440,7 @@ img {
   font-family: var(--font-heading);
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--orange);
+  color: #c44400;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -573,13 +573,13 @@ img {
 }
 
 .services-summary .btn-primary {
-  background: var(--white);
-  color: var(--orange-dark);
+  background: var(--navy);
+  color: var(--white);
 }
 
 .services-summary .btn-primary:hover {
-  background: var(--navy);
-  color: var(--white);
+  background: var(--white);
+  color: var(--navy);
 }
 
 /* Section 3: Academic */
@@ -622,7 +622,7 @@ img {
 .pub-logo {
   width: 48px;
   height: 48px;
-  background: var(--orange);
+  background: var(--navy);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -635,6 +635,7 @@ img {
   letter-spacing: 0.5px;
 }
 
+.academic-item h3,
 .academic-item h4 {
   font-size: 0.92rem;
   color: var(--white);
@@ -697,7 +698,7 @@ img {
 .story-logo {
   width: 36px;
   height: 36px;
-  background: var(--orange);
+  background: var(--navy);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -712,8 +713,8 @@ img {
 .story-source-badge {
   font-family: var(--font-heading);
   font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--orange);
+  font-weight: 700;
+  color: #b33d00;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -754,7 +755,7 @@ img {
   font-family: var(--font-heading);
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--gray);
+  color: #9ca3af;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -989,7 +990,8 @@ img {
 }
 
 .contact-form-home button:hover {
-  background: var(--orange-light);
+  background: var(--white);
+  color: var(--navy);
   transform: translateY(-2px);
 }
 
@@ -1495,7 +1497,7 @@ img {
 
 .footer-brand p {
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.75);
   margin: 0;
 }
 
@@ -1534,7 +1536,7 @@ img {
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.footer-practice h4 {
+.footer-practice h3 {
   color: var(--orange);
   font-size: 1rem;
   margin-bottom: 10px;
@@ -1545,7 +1547,7 @@ img {
 .footer-practice p {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.75);
   max-width: 700px;
   margin-bottom: 16px;
 }
@@ -1575,7 +1577,7 @@ img {
   gap: 40px;
 }
 
-.footer-section h4 {
+.footer-section h3 {
   color: var(--orange);
   font-size: 0.85rem;
   margin-bottom: 16px;
@@ -1586,11 +1588,11 @@ img {
 .footer-section p {
   font-size: 0.85rem;
   margin-bottom: 8px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.75);
 }
 
 .footer-section a {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.75);
   font-size: 0.85rem;
   display: block;
   margin-bottom: 8px;
@@ -1626,8 +1628,8 @@ img {
 .footer-policies a {
   display: inline-block;
   padding: 6px 14px;
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.75);
   font-size: 0.75rem;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -1651,13 +1653,13 @@ img {
 .footer-disclaimer p {
   font-size: 0.78rem;
   line-height: 1.6;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.65);
   margin-bottom: 8px;
   font-style: italic;
 }
 
 .footer-disclaimer a {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.75);
   text-decoration: underline;
 }
 
@@ -1667,7 +1669,7 @@ img {
   border-top: 1px solid rgba(255,255,255,0.06);
   text-align: center;
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.65);
 }
 
 .footer-bottom p {
