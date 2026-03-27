@@ -319,7 +319,8 @@ img {
   margin: 0 auto 16px;
 }
 
-.hero-email-form input[type="email"] {
+.hero-email-form input[type="email"],
+.hero-email-form input[type="tel"] {
   width: 100%;
   padding: 18px 24px;
   background: rgba(255,255,255,0.15);
@@ -332,14 +333,24 @@ img {
   transition: border-color 0.3s, background 0.3s;
 }
 
-.hero-email-form input[type="email"]::placeholder {
+.hero-email-form input[type="email"]::placeholder,
+.hero-email-form input[type="tel"]::placeholder {
   color: rgba(255,255,255,0.5);
 }
 
-.hero-email-form input[type="email"]:focus {
+.hero-email-form input[type="email"]:focus,
+.hero-email-form input[type="tel"]:focus {
   outline: none;
   border-color: var(--white);
   background: rgba(255,255,255,0.2);
+}
+
+.hero-response {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
 }
 
 .hero-buttons {
@@ -347,7 +358,7 @@ img {
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 36px;
+  margin-bottom: 12px;
 }
 
 .hero-trust {
@@ -2126,7 +2137,8 @@ img {
     max-width: 100%;
   }
 
-  .hero-email-form input[type="email"] {
+  .hero-email-form input[type="email"],
+.hero-email-form input[type="tel"] {
     font-size: 1rem;
     padding: 16px 20px;
   }
