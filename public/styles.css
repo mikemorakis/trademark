@@ -678,14 +678,14 @@ img {
   border-color: var(--orange);
 }
 
-.story-item h4 {
+.story-item h3 {
   font-size: 0.88rem;
   color: var(--navy);
   line-height: 1.45;
   flex: 1;
 }
 
-.story-item:hover h4 {
+.story-item:hover h3 {
   color: var(--orange);
 }
 
@@ -1610,7 +1610,7 @@ img {
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-.footer-legal h5 {
+.footer-legal h3 {
   color: var(--white);
   font-size: 0.8rem;
   font-family: var(--font-heading);
