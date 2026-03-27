@@ -12,6 +12,7 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formsubmit.co; form-action 'self' https://formsubmit.co" />
   <meta name="description" content={description} />
   <title>{title} | The Trademark Hoop</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -42,7 +43,7 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
   <header class={`site-header${transparentHeader ? ' transparent' : ''}`} id="siteHeader">
     <div class="header-inner">
       <a href="/" class="site-logo">
-        <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" />
+        <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" width="231" height="55" />
       </a>
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
