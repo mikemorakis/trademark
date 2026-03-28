@@ -108,6 +108,11 @@ img {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  overflow: hidden;
+}
+
+html, body {
+  overflow-x: hidden;
 }
 
 .site-logo {
