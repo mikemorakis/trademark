@@ -812,18 +812,15 @@ img {
 }
 
 .client-logo {
-  max-height: 45px;
-  max-width: 140px;
+  max-height: 55px;
+  max-width: 160px;
   width: auto;
   object-fit: contain;
-  filter: grayscale(100%);
-  opacity: 0.7;
   transition: all 0.3s;
 }
 
 .client-item:hover .client-logo {
-  filter: grayscale(0%);
-  opacity: 1;
+  transform: scale(1.05);
 }
 
 .client-placeholder {
