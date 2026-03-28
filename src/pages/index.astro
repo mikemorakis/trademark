@@ -66,9 +66,15 @@ const academicPubs = [
 ];
 
 const clients = [
-  'Client 1', 'Client 2', 'Client 3',
-  'Client 4', 'Client 5', 'Client 6',
-  'Client 7', 'Client 8', 'Client 9',
+  { name: 'Arrena', logo: '/images/client-arrena.png' },
+  { name: 'Jackaroo', logo: '/images/client-jackaroo.jpg' },
+  { name: 'Client 3', logo: null },
+  { name: 'Client 4', logo: null },
+  { name: 'Client 5', logo: null },
+  { name: 'Client 6', logo: null },
+  { name: 'Client 7', logo: null },
+  { name: 'Client 8', logo: null },
+  { name: 'Client 9', logo: null },
 ];
 ---
 
@@ -194,9 +200,13 @@ const clients = [
       <h2 class="section-title">Εταιρίες που μας εμπιστεύτηκαν</h2>
       <p class="section-subtitle">Επιχειρήσεις και οργανισμοί που επέλεξαν το Trademark Hoop για την προστασία των σημάτων τους</p>
       <div class="clients-grid">
-        {clients.map((client, i) => (
+        {clients.map((client) => (
           <div class="client-item">
-            <span class="client-placeholder">{client}</span>
+            {client.logo ? (
+              <img src={client.logo} alt={client.name} class="client-logo" />
+            ) : (
+              <span class="client-placeholder">{client.name}</span>
+            )}
           </div>
         ))}
       </div>
