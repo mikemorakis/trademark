@@ -24,7 +24,7 @@ if (!post) {
         <span>{post.date}</span>
         <span>{post.author}</span>
       </div>
-      <div class="post-content" set:html={post.content.replace(/\n/g, '<br/>')} />
+      <div class="post-content" set:html={post.content} />
       <div style="margin-top: 40px;">
         <a href="/blog/" style="color: var(--orange); font-weight: 700;">&larr; Όλα τα άρθρα</a>
       </div>
