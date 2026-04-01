@@ -30,7 +30,7 @@ for (let i = openTags.length - 1; i >= 0; i--) safeContent += `</${openTags[i]}>
 ---
 
 <BaseLayout title={post.title} description={post.description || post.title}>
-  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+  <div class="container" style="padding-top: 40px; padding-bottom: 60px;">
     <div class="post-layout">
       <!-- Article -->
       <article class="single-post">
@@ -96,7 +96,7 @@ for (let i = openTags.length - 1; i >= 0; i--) safeContent += `</${openTags[i]}>
         </div>
       </aside>
     </div>
-  </main>
+  </div>
 </BaseLayout>
 
 <style is:inline>
