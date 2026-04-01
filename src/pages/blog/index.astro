@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import ArchivePage from '../../components/ArchivePage.astro';
 import { env } from "cloudflare:workers";
 
 const db = env.DB;
@@ -12,13 +12,9 @@ if (db) {
 ---
 
 <BaseLayout title="Blog" description="Αρθρογραφία και αναλύσεις σε θέματα εμπορικών σημάτων">
-  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
-    <h1 style="margin-bottom: 8px;">Blog</h1>
-    <p style="color: var(--text-gray); margin-bottom: 40px;">Αρθρογραφία και αναλύσεις σε θέματα εμπορικών σημάτων</p>
-    <div class="archive-grid">
-      {posts.map((post: any) => (
-        <PostCard title={post.title} slug={post.slug} date={post.date} author={post.author} image={post.image} content={post.content} />
-      ))}
+  <section class="news-section">
+    <div class="container">
+      <ArchivePage title="Όλα τα Άρθρα" description="Αρθρογραφία και αναλύσεις σε θέματα εμπορικών σημάτων" posts={posts} />
     </div>
-  </main>
+  </section>
 </BaseLayout>

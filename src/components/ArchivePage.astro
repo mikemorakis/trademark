@@ -1,0 +1,130 @@
+---
+import { env } from "cloudflare:workers";
+
+interface Props {
+  title: string;
+  description: string;
+  posts: any[];
+}
+
+const { title, description, posts } = Astro.props;
+
+const db = env.DB;
+let tags: any[] = [];
+if (db) {
+  const tagResult = await db.prepare('SELECT t.id, t.name, COUNT(pt.post_id) as count FROM tags t LEFT JOIN post_tags pt ON t.id = pt.tag_id GROUP BY t.id ORDER BY count DESC LIMIT 20').all();
+  tags = tagResult.results || [];
+}
+
+const featuredPost = posts[0] || null;
+const feedPosts = posts.slice(1);
+
+const excerpt = (content: string, len = 160) => {
+  if (!content) return '';
+  const text = content.replace(/<[^>]*>?/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  return text.length > len ? text.substring(0, len) + '...' : text;
+};
+
+const clients = [
+  { name: 'Arrena', logo: '/images/client-arrena.jpg' },
+  { name: 'Jackaroo', logo: '/images/client-jackaroo.jpg' },
+  { name: 'Nerapigon Grammou', logo: '/images/client-nerapigon.jpg' },
+  { name: 'Chord', logo: '/images/client-chord.jpg' },
+  { name: 'Simon', logo: '/images/client-simon.jpg' },
+  { name: 'Lunch', logo: '/images/client-lunch.jpg' },
+];
+---
+
+<!-- Featured Post -->
+{featuredPost && (
+  <a href={`/blog/${featuredPost.slug}`} class="featured-post">
+    {featuredPost.image && <img src={featuredPost.image} alt={featuredPost.title} class="featured-img" />}
+    <div class="featured-overlay">
+      <span class="featured-badge">Πρόσφατο</span>
+      <h2>{featuredPost.title}</h2>
+      <p>{excerpt(featuredPost.content, 200)}</p>
+      <span class="featured-meta">{featuredPost.date} &bull; {featuredPost.author}</span>
+    </div>
+  </a>
+)}
+
+<!-- Banner -->
+<div class="home-banner">
+  <a href="/p/blog-page_8.html" class="banner-inner">
+    <span class="banner-text">Χρειάζεστε κατοχύρωση εμπορικού σήματος; Επικοινωνήστε μαζί μας σήμερα.</span>
+    <span class="banner-btn">Συνεργάσου μαζί μας</span>
+  </a>
+</div>
+
+<div class="news-grid">
+  <!-- Feed -->
+  <div class="news-feed">
+    <h2 class="feed-title">{title}</h2>
+    {feedPosts.map((post: any) => (
+      <a href={`/blog/${post.slug}`} class="feed-item">
+        <div class="feed-item-body">
+          <span class="feed-date">{post.date}</span>
+          <h3>{post.title}</h3>
+          <p class="feed-excerpt">{excerpt(post.content)}</p>
+          <span class="feed-author">{post.author}</span>
+        </div>
+        {post.image && (
+          <div class="feed-item-thumb">
+            <img src={post.image} alt={post.title} loading="lazy" />
+          </div>
+        )}
+      </a>
+    ))}
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="news-sidebar">
+    <div class="sidebar-widget sidebar-cta">
+      <h4>Κατοχύρωση Σήματος</h4>
+      <p>Προστατεύστε το brand σας. Δωρεάν αρχική αξιολόγηση.</p>
+      <a href="/p/blog-page_8.html" class="sidebar-btn">Επικοινωνία</a>
+    </div>
+
+    <div class="sidebar-widget">
+      <h4>Κατηγορίες</h4>
+      <a href="/category/katochyrosi" class="sidebar-cat">Κατοχύρωση Σήματος</a>
+      <a href="/category/anakopi" class="sidebar-cat">Ανακοπή Σήματος</a>
+      <a href="/case-studies" class="sidebar-cat">Case Studies</a>
+      <a href="/blog/" class="sidebar-cat">Όλα τα άρθρα</a>
+    </div>
+
+    <div class="sidebar-widget">
+      <h4>Tags</h4>
+      <div class="sidebar-tags">
+        {tags.map((tag: any) => (
+          <span class="sidebar-tag">{tag.name}</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="sidebar-widget sidebar-banner">
+      <a href="/case-studies">
+        <span class="sidebar-banner-label">Case Studies</span>
+        <span class="sidebar-banner-title">Netflix, Juventus, Milan AC & more</span>
+      </a>
+    </div>
+
+    <div class="sidebar-widget">
+      <h4>Μας εμπιστεύτηκαν</h4>
+      <div class="sidebar-clients">
+        {clients.map(client => (
+          <div class="sidebar-client">
+            {client.logo && <img src={client.logo} alt={client.name} />}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <h4>Επικοινωνία</h4>
+      <p style="font-size:0.82rem;color:var(--text-gray);margin-bottom:8px;">Λυκαβηττού 2, Κολωνάκι</p>
+      <p style="font-size:0.82rem;color:var(--text-gray);margin-bottom:8px;">T: <a href="tel:+302130464985">213 046 4985</a></p>
+      <p style="font-size:0.82rem;color:var(--text-gray);"><a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a></p>
+    </div>
+  </aside>
+</div>
