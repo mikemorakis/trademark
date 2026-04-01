@@ -200,6 +200,17 @@ html, body {
   background: rgba(255,255,255,0.06) !important;
 }
 
+.nav-btn-cta {
+  background: var(--orange) !important;
+  color: var(--white) !important;
+  border-radius: 6px !important;
+  padding: 8px 18px !important;
+}
+
+.nav-btn-cta:hover {
+  background: var(--orange-dark) !important;
+}
+
 .nav-mobile-ctas {
   display: none;
 }
