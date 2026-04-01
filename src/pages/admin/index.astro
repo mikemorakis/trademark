@@ -22,7 +22,7 @@ if (Astro.request.method === 'POST') {
     const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     const user = await db.prepare('SELECT * FROM admin_users WHERE username = ? AND password_hash = ?').bind(username, hashHex).first();
     if (user) {
-      Astro.cookies.set('admin_session', 'authenticated', { path: '/admin', httpOnly: true, secure: true, sameSite: 'strict', maxAge: 86400 });
+      Astro.cookies.set('admin_session', 'authenticated', { path: '/', httpOnly: true, secure: true, sameSite: 'strict', maxAge: 86400 });
       loggedIn = true;
     } else {
       error = 'Wrong username or password';
@@ -30,7 +30,7 @@ if (Astro.request.method === 'POST') {
   }
 
   if (action === 'logout') {
-    Astro.cookies.delete('admin_session', { path: '/admin' });
+    Astro.cookies.delete('admin_session', { path: '/' });
     loggedIn = false;
   }
 
