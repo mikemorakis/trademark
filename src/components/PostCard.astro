@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+  slug: string;
+  date: string;
+  author: string;
+  image?: string;
+  content?: string;
+}
+
+const { title, slug, date, author, image, content } = Astro.props;
+
+// Generate excerpt from content (strip HTML, take first 160 chars)
+let excerpt = '';
+if (content) {
+  excerpt = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 160);
+  if (content.length > 160) excerpt += '...';
+}
+---
+
+<a href={`/blog/${slug}`} class="post-card-item">
+  {image && (
+    <div class="post-card-image">
+      <img src={image} alt={title} loading="lazy" />
+    </div>
+  )}
+  <div class="post-card-body">
+    <span class="post-card-date">{date}</span>
+    <h3 class="post-card-title">{title}</h3>
+    {excerpt && <p class="post-card-excerpt">{excerpt}</p>}
+    <span class="post-card-author">{author}</span>
+  </div>
+</a>

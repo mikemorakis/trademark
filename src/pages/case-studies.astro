@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
 import { env } from "cloudflare:workers";
 
 const db = env.DB;
@@ -17,7 +18,7 @@ let groupedPosts: any[] = [];
 if (db) {
   for (const group of caseGroups) {
     const result = await db.prepare(`
-      SELECT DISTINCT p.id, p.title, p.slug, p.date, p.author
+      SELECT DISTINCT p.id, p.title, p.slug, p.date, p.author, p.image, p.content
       FROM posts p
       JOIN post_tags pt ON p.id = pt.post_id
       JOIN tags t ON pt.tag_id = t.id
@@ -42,12 +43,9 @@ if (db) {
             <span class="case-icon">{group.icon}</span>
             <h2>{group.label}</h2>
           </div>
-          <div class="case-cards">
+          <div class="archive-grid">
             {group.posts.map((post: any) => (
-              <a href={`/blog/${post.slug}`} class="case-card">
-                <span class="case-date">{post.date}</span>
-                <h3>{post.title}</h3>
-              </a>
+              <PostCard title={post.title} slug={post.slug} date={post.date} author={post.author} image={post.image} content={post.content} />
             ))}
           </div>
         </div>
@@ -61,11 +59,4 @@ if (db) {
   .case-group-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid #fb6412; }
   .case-icon { width: 42px; height: 42px; background: #0f2d4a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-family: Verdana, sans-serif; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
   .case-group-header h2 { font-size: 1.3rem; color: #0f2d4a; margin: 0; }
-  .case-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .case-card { background: #fff; border-radius: 10px; padding: 24px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.3s; text-decoration: none; display: block; }
-  .case-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); border-color: #fb6412; }
-  .case-date { font-size: 0.72rem; color: #fb6412; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-  .case-card h3 { font-size: 0.95rem; margin: 6px 0 0; color: #0f2d4a; line-height: 1.4; }
-  .case-card:hover h3 { color: #fb6412; }
-  @media (max-width: 768px) { .case-cards { grid-template-columns: 1fr; } }
 </style>
