@@ -5,6 +5,7 @@ const db = env.DB;
 const cookie = Astro.cookies.get('admin_session')?.value;
 let loggedIn = cookie === 'authenticated';
 let posts: any[] = [];
+let categories: any[] = [];
 let error = '';
 let success = '';
 
@@ -32,14 +33,29 @@ if (Astro.request.method === 'POST') {
     loggedIn = false;
   }
 
+  if (action === 'add_category' && loggedIn && db) {
+    const catName = form.get('new_category')?.toString() || '';
+    if (catName) {
+      const catSlug = catName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-');
+      try {
+        await db.prepare('INSERT INTO categories (name, slug) VALUES (?, ?)').bind(catName, catSlug).run();
+        success = 'Category added!';
+      } catch(e: any) {
+        error = e.message || 'Failed to add category';
+      }
+    }
+  }
+
   if (action === 'create' && loggedIn && db) {
     const title = form.get('title')?.toString() || '';
     const slug = form.get('slug')?.toString() || '';
     const content = form.get('content')?.toString() || '';
     const date = form.get('date')?.toString() || new Date().toISOString().split('T')[0];
     const author = form.get('author')?.toString() || 'Giannis Psarakis';
+    const categoryId = form.get('category_id')?.toString() || null;
+    const image = form.get('image')?.toString() || null;
     try {
-      await db.prepare('INSERT INTO posts (title, slug, content, author, date, published) VALUES (?, ?, ?, ?, ?, 1)').bind(title, slug, content, author, date).run();
+      await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, published) VALUES (?, ?, ?, ?, ?, ?, ?, 1)').bind(title, slug, content, author, date, categoryId, image).run();
       success = 'Post created!';
     } catch(e: any) {
       error = e.message || 'Failed to create post';
@@ -56,8 +72,10 @@ if (Astro.request.method === 'POST') {
 }
 
 if (loggedIn && db) {
-  const result = await db.prepare('SELECT id, title, slug, date, published FROM posts ORDER BY date DESC').all();
+  const result = await db.prepare('SELECT p.id, p.title, p.slug, p.date, p.published, c.name as category FROM posts p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.date DESC').all();
   posts = result.results || [];
+  const catResult = await db.prepare('SELECT id, name, slug FROM categories ORDER BY name').all();
+  categories = catResult.results || [];
 }
 ---
 
@@ -165,6 +183,31 @@ if (loggedIn && db) {
               <input type="text" name="author" value="Giannis Psarakis" />
             </div>
           </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px;">
+            <div>
+              <label>Category</label>
+              <select name="category_id" style="width:100%;padding:10px 14px;border:1px solid #2d5a7b;border-radius:6px;font-family:Verdana,sans-serif;font-size:0.9rem;margin-bottom:16px;background:#0d2440;color:#e5e7eb;">
+                <option value="">-- No category --</option>
+                {categories.map((cat: any) => (
+                  <option value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label>Add New Category</label>
+              <div style="display:flex;gap:8px;">
+                <input type="text" id="newCatInput" placeholder="New category name" style="flex:1;margin-bottom:0;" />
+                <button type="button" class="btn btn-outline" style="white-space:nowrap;padding:10px 16px;" onclick="
+                  const inp = document.getElementById('newCatInput');
+                  if (!inp.value) return;
+                  const fd = new FormData();
+                  fd.append('action', 'add_category');
+                  fd.append('new_category', inp.value);
+                  fetch('/admin/', { method: 'POST', body: fd }).then(() => location.reload());
+                ">+ Add</button>
+              </div>
+            </div>
+          </div>
           <label>Featured Image</label>
           <div class="image-upload" id="imageUploadArea" onclick="document.getElementById('imageFile').click()">
             <input type="file" id="imageFile" accept="image/*" />
@@ -187,14 +230,14 @@ if (loggedIn && db) {
         <h2 style="margin-bottom: 20px; font-size: 1.1rem;">All Posts ({posts.length})</h2>
         <table>
           <thead>
-            <tr><th>Title</th><th>Date</th><th>Slug</th><th>Actions</th></tr>
+            <tr><th>Title</th><th>Category</th><th>Date</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {posts.map((post: any) => (
               <tr>
                 <td><a href={`/blog/${post.slug}`} target="_blank">{post.title}</a></td>
+                <td><span style={`font-size:0.72rem;padding:3px 8px;border-radius:10px;background:${post.category ? 'rgba(251,100,18,0.15)' : 'transparent'};color:${post.category ? '#fb6412' : '#6b7280'};`}>{post.category || '—'}</span></td>
                 <td>{post.date}</td>
-                <td style="font-size:0.75rem;color:#6b7280;">{post.slug}</td>
                 <td>
                   <div class="post-actions">
                     <a href={`/admin/edit/${post.id}`} class="btn btn-outline" style="font-size:0.7rem;padding:6px 12px;">Edit</a>
