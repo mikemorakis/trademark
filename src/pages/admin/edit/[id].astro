@@ -90,8 +90,14 @@ if (!post) return Astro.redirect('/admin/');
             <input type="text" name="author" value={post.author} />
           </div>
         </div>
-        <label>Featured Image URL</label>
-        <input type="text" name="image" value={post.image || ''} placeholder="/images/uploads/my-image.jpg" />
+        <label>Featured Image</label>
+        <div class="image-upload" onclick="document.getElementById('imageFile').click()" style="border:2px dashed #d1d5db;border-radius:8px;padding:24px;text-align:center;cursor:pointer;">
+          <input type="file" id="imageFile" accept="image/*" style="display:none;" />
+          <input type="hidden" name="image" id="imageUrl" value={post.image || ''} />
+          <div id="imagePreview">
+            {post.image ? <img src={post.image} style="max-height:120px;border-radius:6px;" /> : <p style="color:#9ca3af;font-size:0.85rem;">Click to upload image</p>}
+          </div>
+        </div>
 
         <label>Content</label>
         <div id="editor"></div>
@@ -103,6 +109,28 @@ if (!post) return Astro.redirect('/admin/');
     </div>
   </div>
   <script is:inline src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <script is:inline>
+    document.getElementById('imageFile').addEventListener('change', async function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var preview = document.getElementById('imagePreview');
+      preview.innerHTML = '<p style="color:#fb6412;">Uploading...</p>';
+      var fd = new FormData();
+      fd.append('file', file);
+      try {
+        var res = await fetch('/api/upload', { method: 'POST', body: fd });
+        var data = await res.json();
+        if (data.url) {
+          document.getElementById('imageUrl').value = data.url;
+          preview.innerHTML = '<img src="' + data.url + '" style="max-height:120px;border-radius:6px;" /><p style="font-size:0.75rem;color:#16a34a;margin-top:8px;">Uploaded!</p>';
+        } else {
+          preview.innerHTML = '<p style="color:#dc2626;">Error: ' + (data.error || 'Upload failed') + '</p>';
+        }
+      } catch(err) {
+        preview.innerHTML = '<p style="color:#dc2626;">Upload failed</p>';
+      }
+    });
+  </script>
   <script is:inline define:vars={{ postContent: post.content }}>
     var quill = new Quill('#editor', {
       theme: 'snow',
