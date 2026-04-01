@@ -1,0 +1,95 @@
+---
+const db = Astro.locals.runtime?.env?.DB;
+const cookie = Astro.cookies.get('admin_session')?.value;
+if (cookie !== 'authenticated') return Astro.redirect('/admin/');
+
+const { id } = Astro.params;
+let post: any = null;
+let success = '';
+let error = '';
+
+if (Astro.request.method === 'POST' && db) {
+  const form = await Astro.request.formData();
+  const title = form.get('title')?.toString() || '';
+  const slug = form.get('slug')?.toString() || '';
+  const content = form.get('content')?.toString() || '';
+  const date = form.get('date')?.toString() || '';
+  const author = form.get('author')?.toString() || 'Giannis Psarakis';
+  try {
+    await db.prepare('UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, updated_at=datetime(?) WHERE id=?')
+      .bind(title, slug, content, date, author, 'now', id).run();
+    success = 'Post updated!';
+  } catch(e: any) {
+    error = e.message || 'Failed to update';
+  }
+}
+
+if (db && id) {
+  post = await db.prepare('SELECT * FROM posts WHERE id = ?').bind(id).first();
+}
+
+if (!post) return Astro.redirect('/admin/');
+---
+
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Edit Post | Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Verdana, sans-serif; background: #f3f4f6; color: #1f2937; }
+    .admin-wrap { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 2px solid #fb6412; margin-bottom: 30px; }
+    .admin-header h1 { font-size: 1.3rem; color: #0f2d4a; }
+    .card { background: #fff; border-radius: 10px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    label { display: block; font-size: 0.8rem; font-weight: 700; color: #4b5563; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+    input, textarea { width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 6px; font-family: Verdana, sans-serif; font-size: 0.9rem; margin-bottom: 16px; }
+    textarea { min-height: 350px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: #fb6412; }
+    .btn { display: inline-block; padding: 10px 24px; border: none; border-radius: 6px; font-family: Verdana, sans-serif; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; }
+    .btn-primary { background: #fb6412; color: #fff; }
+    .btn-primary:hover { background: #e55a0e; }
+    .btn-outline { background: none; border: 1px solid #d1d5db; color: #4b5563; }
+    .alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem; }
+    .alert-error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .alert-success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>Edit Post</h1>
+      <a href="/admin/" class="btn btn-outline">&larr; Back to Admin</a>
+    </div>
+
+    {error && <div class="alert alert-error">{error}</div>}
+    {success && <div class="alert alert-success">{success}</div>}
+
+    <div class="card">
+      <form method="POST">
+        <label>Title</label>
+        <input type="text" name="title" value={post.title} required />
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+          <div>
+            <label>Slug (URL)</label>
+            <input type="text" name="slug" value={post.slug} required />
+          </div>
+          <div>
+            <label>Date</label>
+            <input type="date" name="date" value={post.date} />
+          </div>
+          <div>
+            <label>Author</label>
+            <input type="text" name="author" value={post.author} />
+          </div>
+        </div>
+        <label>Content</label>
+        <textarea name="content" required>{post.content}</textarea>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

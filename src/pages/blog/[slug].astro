@@ -1,30 +1,29 @@
 ---
-import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map(post => ({
-    params: { slug: post.data.slug },
-    props: { post },
-  }));
+const { slug } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+let post: any = null;
+
+if (db && slug) {
+  const result = await db.prepare('SELECT * FROM posts WHERE slug = ? AND published = 1').bind(slug).first();
+  post = result;
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+if (!post) {
+  return Astro.redirect('/blog/');
+}
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description || post.data.title}>
+<BaseLayout title={post.title} description={post.description || post.title}>
   <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
     <article class="single-post">
-      <h1>{post.data.title}</h1>
+      <h1>{post.title}</h1>
       <div class="post-meta">
-        <span>{post.data.date}</span>
-        <span>{post.data.author}</span>
+        <span>{post.date}</span>
+        <span>{post.author}</span>
       </div>
-      <div class="post-content">
-        <Content />
-      </div>
+      <div class="post-content" set:html={post.content.replace(/\n/g, '<br/>')} />
       <div style="margin-top: 40px;">
         <a href="/blog/" style="color: var(--orange); font-weight: 700;">&larr; Όλα τα άρθρα</a>
       </div>

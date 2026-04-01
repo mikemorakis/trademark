@@ -1,0 +1,193 @@
+---
+const db = Astro.locals.runtime?.env?.DB;
+const cookie = Astro.cookies.get('admin_session')?.value;
+let loggedIn = cookie === 'authenticated';
+let posts: any[] = [];
+let error = '';
+let success = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = form.get('action')?.toString();
+
+  if (action === 'login' && db) {
+    const username = form.get('username')?.toString() || '';
+    const password = form.get('password')?.toString() || '';
+    const crypto = globalThis.crypto;
+    const encoder = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+    const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    const user = await db.prepare('SELECT * FROM admin_users WHERE username = ? AND password_hash = ?').bind(username, hashHex).first();
+    if (user) {
+      Astro.cookies.set('admin_session', 'authenticated', { path: '/admin', httpOnly: true, secure: true, sameSite: 'strict', maxAge: 86400 });
+      loggedIn = true;
+    } else {
+      error = 'Wrong username or password';
+    }
+  }
+
+  if (action === 'logout') {
+    Astro.cookies.delete('admin_session', { path: '/admin' });
+    loggedIn = false;
+  }
+
+  if (action === 'create' && loggedIn && db) {
+    const title = form.get('title')?.toString() || '';
+    const slug = form.get('slug')?.toString() || '';
+    const content = form.get('content')?.toString() || '';
+    const date = form.get('date')?.toString() || new Date().toISOString().split('T')[0];
+    const author = form.get('author')?.toString() || 'Giannis Psarakis';
+    try {
+      await db.prepare('INSERT INTO posts (title, slug, content, author, date, published) VALUES (?, ?, ?, ?, ?, 1)').bind(title, slug, content, author, date).run();
+      success = 'Post created!';
+    } catch(e: any) {
+      error = e.message || 'Failed to create post';
+    }
+  }
+
+  if (action === 'delete' && loggedIn && db) {
+    const id = form.get('id')?.toString();
+    if (id) {
+      await db.prepare('DELETE FROM posts WHERE id = ?').bind(id).run();
+      success = 'Post deleted';
+    }
+  }
+}
+
+if (loggedIn && db) {
+  const result = await db.prepare('SELECT id, title, slug, date, published FROM posts ORDER BY date DESC').all();
+  posts = result.results || [];
+}
+---
+
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin | The Trademark Hoop</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Verdana, sans-serif; background: #f3f4f6; color: #1f2937; }
+    .admin-wrap { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 2px solid #fb6412; margin-bottom: 30px; }
+    .admin-header h1 { font-size: 1.3rem; color: #0f2d4a; }
+    .admin-header img { height: 32px; }
+    .card { background: #fff; border-radius: 10px; padding: 28px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    label { display: block; font-size: 0.8rem; font-weight: 700; color: #4b5563; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+    input, textarea, select { width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 6px; font-family: Verdana, sans-serif; font-size: 0.9rem; margin-bottom: 16px; }
+    textarea { min-height: 250px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: #fb6412; }
+    .btn { display: inline-block; padding: 10px 24px; border: none; border-radius: 6px; font-family: Verdana, sans-serif; font-size: 0.8rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+    .btn-primary { background: #fb6412; color: #fff; }
+    .btn-primary:hover { background: #e55a0e; }
+    .btn-danger { background: #dc2626; color: #fff; font-size: 0.7rem; padding: 6px 14px; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-outline { background: none; border: 1px solid #d1d5db; color: #4b5563; }
+    .btn-outline:hover { border-color: #fb6412; color: #fb6412; }
+    .alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem; }
+    .alert-error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .alert-success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #4b5563; padding: 10px 12px; border-bottom: 2px solid #e5e7eb; }
+    td { padding: 12px; border-bottom: 1px solid #f3f4f6; font-size: 0.85rem; }
+    td a { color: #fb6412; text-decoration: none; }
+    .login-wrap { max-width: 380px; margin: 80px auto; }
+    .login-wrap h2 { text-align: center; margin-bottom: 24px; color: #0f2d4a; }
+    .login-wrap img { display: block; margin: 0 auto 20px; height: 40px; }
+    .post-actions { display: flex; gap: 8px; }
+  </style>
+</head>
+<body>
+  {!loggedIn ? (
+    <div class="login-wrap">
+      <div class="card">
+        <img src="/trademarkhoop-logo.png" alt="Logo" />
+        <h2>Admin Login</h2>
+        {error && <div class="alert alert-error">{error}</div>}
+        <form method="POST">
+          <input type="hidden" name="action" value="login" />
+          <label>Username</label>
+          <input type="text" name="username" required />
+          <label>Password</label>
+          <input type="password" name="password" required />
+          <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+        </form>
+      </div>
+    </div>
+  ) : (
+    <div class="admin-wrap">
+      <div class="admin-header">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="/trademarkhoop-logo.png" alt="Logo" />
+          <h1>Blog Admin</h1>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <a href="/" class="btn btn-outline">View Site</a>
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="action" value="logout" />
+            <button type="submit" class="btn btn-outline">Logout</button>
+          </form>
+        </div>
+      </div>
+
+      {error && <div class="alert alert-error">{error}</div>}
+      {success && <div class="alert alert-success">{success}</div>}
+
+      <div class="card">
+        <h2 style="margin-bottom: 20px; font-size: 1.1rem;">New Post</h2>
+        <form method="POST">
+          <input type="hidden" name="action" value="create" />
+          <label>Title</label>
+          <input type="text" name="title" required />
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+            <div>
+              <label>Slug (URL)</label>
+              <input type="text" name="slug" required placeholder="my-post-slug" />
+            </div>
+            <div>
+              <label>Date</label>
+              <input type="date" name="date" value={new Date().toISOString().split('T')[0]} />
+            </div>
+            <div>
+              <label>Author</label>
+              <input type="text" name="author" value="Giannis Psarakis" />
+            </div>
+          </div>
+          <label>Content (HTML or plain text)</label>
+          <textarea name="content" required></textarea>
+          <button type="submit" class="btn btn-primary">Publish Post</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom: 20px; font-size: 1.1rem;">All Posts ({posts.length})</h2>
+        <table>
+          <thead>
+            <tr><th>Title</th><th>Date</th><th>Slug</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            {posts.map((post: any) => (
+              <tr>
+                <td><a href={`/blog/${post.slug}`} target="_blank">{post.title}</a></td>
+                <td>{post.date}</td>
+                <td style="font-size:0.75rem;color:#6b7280;">{post.slug}</td>
+                <td>
+                  <div class="post-actions">
+                    <a href={`/admin/edit/${post.id}`} class="btn btn-outline" style="font-size:0.7rem;padding:6px 12px;">Edit</a>
+                    <form method="POST" onsubmit="return confirm('Delete this post?')">
+                      <input type="hidden" name="action" value="delete" />
+                      <input type="hidden" name="id" value={post.id} />
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )}
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "trademark",
+  "compatibility_date": "2025-04-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "trademark-blog",
+      "database_id": "1cc72a6b-e964-4cd8-83c0-697cf169b9aa"
+    }
+  ]
+}
