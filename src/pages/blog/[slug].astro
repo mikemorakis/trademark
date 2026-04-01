@@ -19,6 +19,14 @@ if (db && slug) {
 if (!post) {
   return Astro.redirect('/blog/');
 }
+
+// Sanitize content - close unclosed tags to prevent DOM bleed
+let safeContent = (post.content || '').replace(/<img([^>]*)(?<!\/)>/gi, '<img$1 />');
+// Remove any unclosed div/span/p/a/table tags at the end
+const openTags: string[] = [];
+safeContent.replace(/<(p|div|span|table|tr|td|th|ul|ol|li|blockquote|strong|em|b|i|a|h[1-6])\b[^>]*>/gi, (_m: string, tag: string) => { openTags.push(tag.toLowerCase()); return ''; });
+safeContent.replace(/<\/(p|div|span|table|tr|td|th|ul|ol|li|blockquote|strong|em|b|i|a|h[1-6])>/gi, (_m: string, tag: string) => { const idx = openTags.lastIndexOf(tag.toLowerCase()); if (idx !== -1) openTags.splice(idx, 1); return ''; });
+for (let i = openTags.length - 1; i >= 0; i--) safeContent += `</${openTags[i]}>`;
 ---
 
 <BaseLayout title={post.title} description={post.description || post.title}>
@@ -32,7 +40,7 @@ if (!post) {
           <span>{post.author}</span>
         </div>
         {post.image && <img src={post.image} alt={post.title} style="width:100%;border-radius:10px;margin-bottom:24px;" />}
-        <div class="post-content" set:html={post.content} />
+        <div class="post-content" set:html={safeContent}></div>
         {tags.length > 0 && (
           <div class="post-tags-list">
             {tags.map((t: any) => <span class="post-tag-pill">{t.name}</span>)}
