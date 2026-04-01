@@ -22,7 +22,7 @@ if (db) {
 const feedPosts = allPosts.slice(1, 11);
 const excerpt = (content: string, len = 160) => {
   if (!content) return '';
-  const text = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const text = content.replace(/<[^>]*>?/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
   return text.length > len ? text.substring(0, len) + '...' : text;
 };
 

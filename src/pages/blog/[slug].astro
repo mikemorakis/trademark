@@ -5,10 +5,15 @@ import { env } from "cloudflare:workers";
 const { slug } = Astro.params;
 const db = env.DB;
 let post: any = null;
+let recentPosts: any[] = [];
+let tags: any[] = [];
 
 if (db && slug) {
-  const result = await db.prepare('SELECT * FROM posts WHERE slug = ? AND published = 1').bind(slug).first();
-  post = result;
+  post = await db.prepare('SELECT * FROM posts WHERE slug = ? AND published = 1').bind(slug).first();
+  const recent = await db.prepare('SELECT title, slug, date FROM posts WHERE published = 1 AND slug != ? ORDER BY date DESC LIMIT 5').bind(slug).all();
+  recentPosts = recent.results || [];
+  const tagResult = await db.prepare('SELECT t.name FROM tags t JOIN post_tags pt ON t.id = pt.tag_id JOIN posts p ON pt.post_id = p.id WHERE p.slug = ?').bind(slug).all();
+  tags = tagResult.results || [];
 }
 
 if (!post) {
@@ -18,16 +23,114 @@ if (!post) {
 
 <BaseLayout title={post.title} description={post.description || post.title}>
   <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
-    <article class="single-post">
-      <h1>{post.title}</h1>
-      <div class="post-meta">
-        <span>{post.date}</span>
-        <span>{post.author}</span>
-      </div>
-      <div class="post-content" set:html={post.content} />
-      <div style="margin-top: 40px;">
-        <a href="/blog/" style="color: var(--orange); font-weight: 700;">&larr; Όλα τα άρθρα</a>
-      </div>
-    </article>
+    <div class="post-layout">
+      <!-- Article -->
+      <article class="single-post">
+        <h1>{post.title}</h1>
+        <div class="post-meta">
+          <span>{post.date}</span>
+          <span>{post.author}</span>
+        </div>
+        {post.image && <img src={post.image} alt={post.title} style="width:100%;border-radius:10px;margin-bottom:24px;" />}
+        <div class="post-content" set:html={post.content} />
+        {tags.length > 0 && (
+          <div class="post-tags-list">
+            {tags.map((t: any) => <span class="post-tag-pill">{t.name}</span>)}
+          </div>
+        )}
+        <div style="margin-top: 40px;">
+          <a href="/blog/" style="color: var(--orange); font-weight: 700;">&larr; Όλα τα άρθρα</a>
+        </div>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="post-sidebar">
+        <!-- B2B Lawyer Banner -->
+        <div class="ps-widget ps-banner-b2b">
+          <span class="ps-banner-label">B2B</span>
+          <h4>Δικηγόρος Εμπορικών Σημάτων</h4>
+          <p>Εξειδικευμένες νομικές υπηρεσίες για επιχειρήσεις. Κατοχύρωση, ανακοπή & προστασία σημάτων.</p>
+          <a href="/p/blog-page_8.html" class="ps-banner-btn">Επικοινωνήστε μαζί μας</a>
+        </div>
+
+        <!-- Become Partner Banner -->
+        <div class="ps-widget ps-banner-partner">
+          <span class="ps-banner-label">Συνεργασία</span>
+          <h4>Γίνε Συνεργάτης</h4>
+          <p>Αρθρογραφείς στον χώρο του IP; Δημοσίευσε στο thetrademarkhoop.com</p>
+          <a href="/p/blog-page_8.html" class="ps-banner-btn-outline">Στείλε μας το άρθρο σου</a>
+        </div>
+
+        <!-- Recent Posts -->
+        <div class="ps-widget">
+          <h4>Πρόσφατα Άρθρα</h4>
+          {recentPosts.map((p: any) => (
+            <a href={`/blog/${p.slug}`} class="ps-recent">
+              <span class="ps-recent-date">{p.date}</span>
+              <span class="ps-recent-title">{p.title}</span>
+            </a>
+          ))}
+        </div>
+
+        <!-- Categories -->
+        <div class="ps-widget">
+          <h4>Κατηγορίες</h4>
+          <a href="/category/katochyrosi" class="sidebar-cat">Κατοχύρωση Σήματος</a>
+          <a href="/category/anakopi" class="sidebar-cat">Ανακοπή Σήματος</a>
+          <a href="/case-studies" class="sidebar-cat">Case Studies</a>
+        </div>
+
+        <!-- CTA -->
+        <div class="ps-widget ps-cta">
+          <h4>Κατοχύρωση Σήματος</h4>
+          <p>Προστατεύστε το brand σας πριν είναι αργά.</p>
+          <a href="/p/blog-page_8.html" class="sidebar-btn">Δωρεάν Αξιολόγηση</a>
+        </div>
+      </aside>
+    </div>
   </main>
 </BaseLayout>
+
+<style is:inline>
+  .post-layout { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
+  .post-sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 80px; }
+  .ps-widget { background: #fff; border-radius: 10px; padding: 22px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .ps-widget h4 { font-size: 0.8rem; color: #0f2d4a; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #fb6412; }
+
+  /* B2B Banner */
+  .ps-banner-b2b { background: linear-gradient(135deg, #0f2d4a, #1a4a73); border: none; }
+  .ps-banner-b2b .ps-banner-label { display: inline-block; background: #fb6412; color: #fff; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 3px 10px; border-radius: 3px; margin-bottom: 12px; }
+  .ps-banner-b2b h4 { color: #fff; border-bottom: none; padding-bottom: 0; margin-bottom: 10px; font-size: 1rem; }
+  .ps-banner-b2b p { color: rgba(255,255,255,0.7); font-size: 0.82rem; line-height: 1.5; margin-bottom: 16px; }
+  .ps-banner-btn { display: block; background: #fb6412; color: #fff; text-align: center; padding: 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: all 0.3s; }
+  .ps-banner-btn:hover { background: #e55a0e; color: #fff; }
+
+  /* Partner Banner */
+  .ps-banner-partner { background: #fb6412; border: none; }
+  .ps-banner-partner .ps-banner-label { display: inline-block; background: #fff; color: #fb6412; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 3px 10px; border-radius: 3px; margin-bottom: 12px; }
+  .ps-banner-partner h4 { color: #fff; border-bottom: none; padding-bottom: 0; margin-bottom: 10px; font-size: 1rem; }
+  .ps-banner-partner p { color: rgba(255,255,255,0.85); font-size: 0.82rem; line-height: 1.5; margin-bottom: 16px; }
+  .ps-banner-btn-outline { display: block; background: transparent; color: #fff; text-align: center; padding: 10px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: all 0.3s; }
+  .ps-banner-btn-outline:hover { background: #fff; color: #fb6412; }
+
+  /* Recent Posts */
+  .ps-recent { display: block; padding: 10px 0; border-bottom: 1px solid #f3f4f6; text-decoration: none; transition: color 0.2s; }
+  .ps-recent:last-child { border-bottom: none; }
+  .ps-recent-date { display: block; font-size: 0.68rem; color: #fb6412; font-weight: 700; letter-spacing: 0.5px; }
+  .ps-recent-title { display: block; font-size: 0.85rem; color: #0f2d4a; line-height: 1.4; margin-top: 2px; }
+  .ps-recent:hover .ps-recent-title { color: #fb6412; }
+
+  /* CTA Widget */
+  .ps-cta { background: #fb6412; border: none; }
+  .ps-cta h4 { color: #fff; border-bottom-color: rgba(255,255,255,0.3); }
+  .ps-cta p { color: rgba(255,255,255,0.85); font-size: 0.85rem; margin-bottom: 14px; }
+
+  /* Post Tags */
+  .post-tags-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; }
+  .post-tag-pill { display: inline-block; padding: 4px 12px; background: #f3f4f6; color: #4b5563; font-size: 0.72rem; border-radius: 14px; font-weight: 600; }
+
+  @media (max-width: 992px) {
+    .post-layout { grid-template-columns: 1fr; }
+    .post-sidebar { position: static; }
+  }
+</style>

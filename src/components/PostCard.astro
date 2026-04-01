@@ -10,11 +10,10 @@ interface Props {
 
 const { title, slug, date, author, image, content } = Astro.props;
 
-// Generate excerpt from content (strip HTML, take first 160 chars)
 let excerpt = '';
 if (content) {
-  excerpt = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 160);
-  if (content.length > 160) excerpt += '...';
+  excerpt = content.replace(/<[^>]*>?/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim().substring(0, 160);
+  if (excerpt.length >= 160) excerpt += '...';
 }
 ---
 
