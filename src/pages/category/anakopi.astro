@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { env } from "cloudflare:workers";
+
+const db = env.DB;
+let posts: any[] = [];
+if (db) {
+  const result = await db.prepare(`
+    SELECT DISTINCT p.id, p.title, p.slug, p.date, p.author, p.image
+    FROM posts p
+    LEFT JOIN post_tags pt ON p.id = pt.post_id
+    LEFT JOIN tags t ON pt.tag_id = t.id
+    WHERE p.published = 1 AND (
+      t.name IN ('ΑΝΑΚΟΠΗ', 'ΚΙΝΔΥΝΟΣ ΣΥΓΧΥΣΗΣ', 'ΜΟΡΦΕΣ ΠΡΟΣΒΟΛΗΣ', 'ΠΡΟΣΒΟΛΗ ΣΗΜΑΤΟΣ', 'ΣΗΜΑΤΑ ΦΗΜΗΣ', 'ΑΠΟΜΙΜΗΣΗ')
+    )
+    ORDER BY p.date DESC
+  `).all();
+  posts = result.results || [];
+}
+---
+
+<BaseLayout title="Ανακοπή Εμπορικού Σήματος" description="Άρθρα για ανακοπή, ένσταση, κίνδυνο σύγχυσης και προσβολή εμπορικού σήματος">
+  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+    <h1 style="margin-bottom: 8px;">Ανακοπή Εμπορικού Σήματος</h1>
+    <p style="color: var(--text-gray); margin-bottom: 40px;">Ανακοπή, ένσταση, κίνδυνος σύγχυσης και προσβολή εμπορικού σήματος</p>
+    <div class="blog-grid">
+      {posts.map((post: any) => (
+        <a href={`/blog/${post.slug}`} class="blog-card">
+          <div class="blog-card-body">
+            <span class="blog-date">{post.date}</span>
+            <h3>{post.title}</h3>
+            <span class="blog-author">{post.author}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:inline>
+  .blog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .blog-card { background: #fff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.3s; text-decoration: none; display: block; }
+  .blog-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); border-color: #fb6412; }
+  .blog-card-body { padding: 28px; }
+  .blog-date { font-size: 0.75rem; color: #fb6412; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .blog-card h3 { font-size: 1rem; margin: 8px 0; color: #0f2d4a; line-height: 1.4; }
+  .blog-card:hover h3 { color: #fb6412; }
+  .blog-author { font-size: 0.78rem; color: #4b5563; }
+  @media (max-width: 768px) { .blog-grid { grid-template-columns: 1fr; } }
+</style>

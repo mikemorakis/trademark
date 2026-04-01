@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { env } from "cloudflare:workers";
+
+const db = env.DB;
+
+const caseGroups = [
+  { label: 'European Super League', tag: 'LA LIGA', icon: 'ESL' },
+  { label: 'Netflix', tag: 'NETFLIX', icon: 'N' },
+  { label: 'Turkaegean', tag: 'TURKAEGEAN', icon: 'T' },
+  { label: 'Milan AC', tag: 'MILAN', icon: 'M' },
+  { label: 'Juventus', tag: 'JUVENTUS', icon: 'J' },
+];
+
+let groupedPosts: any[] = [];
+
+if (db) {
+  for (const group of caseGroups) {
+    const result = await db.prepare(`
+      SELECT DISTINCT p.id, p.title, p.slug, p.date, p.author
+      FROM posts p
+      JOIN post_tags pt ON p.id = pt.post_id
+      JOIN tags t ON pt.tag_id = t.id
+      WHERE p.published = 1 AND t.name = ?
+      ORDER BY p.date DESC
+      LIMIT 8
+    `).bind(group.tag).all();
+    groupedPosts.push({ ...group, posts: result.results || [] });
+  }
+}
+---
+
+<BaseLayout title="Case Studies" description="Ανάλυση υποθέσεων εμπορικών σημάτων - Netflix, Juventus, Milan AC, Turkaegean, European Super League">
+  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+    <h1 style="margin-bottom: 8px;">Case Studies</h1>
+    <p style="color: var(--text-gray); margin-bottom: 48px;">Ανάλυση πραγματικών υποθέσεων εμπορικών σημάτων από διεθνή δικαστήρια και τον EUIPO</p>
+
+    {groupedPosts.map((group: any) => (
+      group.posts.length > 0 && (
+        <div class="case-group">
+          <div class="case-group-header">
+            <span class="case-icon">{group.icon}</span>
+            <h2>{group.label}</h2>
+          </div>
+          <div class="case-cards">
+            {group.posts.map((post: any) => (
+              <a href={`/blog/${post.slug}`} class="case-card">
+                <span class="case-date">{post.date}</span>
+                <h3>{post.title}</h3>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    ))}
+  </main>
+</BaseLayout>
+
+<style is:inline>
+  .case-group { margin-bottom: 48px; }
+  .case-group-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid #fb6412; }
+  .case-icon { width: 42px; height: 42px; background: #0f2d4a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-family: Verdana, sans-serif; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+  .case-group-header h2 { font-size: 1.3rem; color: #0f2d4a; margin: 0; }
+  .case-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .case-card { background: #fff; border-radius: 10px; padding: 24px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.3s; text-decoration: none; display: block; }
+  .case-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); border-color: #fb6412; }
+  .case-date { font-size: 0.72rem; color: #fb6412; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .case-card h3 { font-size: 0.95rem; margin: 6px 0 0; color: #0f2d4a; line-height: 1.4; }
+  .case-card:hover h3 { color: #fb6412; }
+  @media (max-width: 768px) { .case-cards { grid-template-columns: 1fr; } }
+</style>
