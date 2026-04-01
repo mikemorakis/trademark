@@ -1,69 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { env } from "cloudflare:workers";
+
+const db = env.DB;
+let allPosts: any[] = [];
+let featuredPost: any = null;
+let categories: any[] = [];
+let tags: any[] = [];
+
+if (db) {
+  const result = await db.prepare('SELECT id, title, slug, date, author, image, content FROM posts WHERE published = 1 ORDER BY date DESC').all();
+  allPosts = result.results || [];
+  featuredPost = allPosts[0] || null;
+  const catResult = await db.prepare('SELECT id, name, slug FROM categories ORDER BY name').all();
+  categories = catResult.results || [];
+  const tagResult = await db.prepare('SELECT t.id, t.name, COUNT(pt.post_id) as count FROM tags t LEFT JOIN post_tags pt ON t.id = pt.tag_id GROUP BY t.id ORDER BY count DESC LIMIT 20').all();
+  tags = tagResult.results || [];
+}
+
+const feedPosts = allPosts.slice(1, 11);
+const excerpt = (content: string, len = 160) => {
+  if (!content) return '';
+  const text = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  return text.length > len ? text.substring(0, len) + '...' : text;
+};
 
 const faqItems = [
-  {
-    question: 'Με συμφέρει η κατοχύρωση εμπορικού σήματος;',
-    answer: 'Η κατοχύρωση εμπορικού σήματος αποτελεί μια ιδιαίτερα συμφέρουσα επιλογή για κάθε επιχείρηση. Σύμφωνα με έρευνες, επιχειρήσεις που επενδύουν σε δικαιώματα διανοητικής ιδιοκτησίας παρουσιάζουν αυξημένα έσοδα ανά υπάλληλο κατά 55%. Η Ελλάδα προσφέρει τα χαμηλότερα τέλη καταχώρισης μεταξύ συγκρίσιμων ευρωπαϊκών χωρών, στα 100 ευρώ ανά κλάση.',
-  },
-  {
-    question: 'Τι είναι το εμπορικό σήμα και τι μπορώ να κατοχυρώσω ως τέτοιο;',
-    answer: 'Σύμφωνα με τον νόμο 4679/2020, εμπορικό σήμα μπορεί να αποτελείται από λέξεις, ονόματα, σχέδια, γράμματα, αριθμούς, χρώματα, σχήμα προϊόντος ή συσκευασίας, ή ήχους, εφόσον μπορούν να διακρίνουν τα προϊόντα ή τις υπηρεσίες μιας επιχείρησης από εκείνα άλλων.',
-  },
-  {
-    question: 'Προστατεύομαι για πάντα; Σε ποιες περιοχές;',
-    answer: 'Η προστασία διαρκεί 10 έτη από την ημερομηνία κατάθεσης, με δυνατότητα ανανέωσης επ\' αόριστον. Οι επιλογές καταχώρισης περιλαμβάνουν: εθνικό σήμα (προστασία στην Ελλάδα), σήμα ΕΕ (προστασία σε όλα τα κράτη-μέλη) ή διεθνή καταχώριση (προστασία σε συγκεκριμένες χώρες).',
-  },
-  {
-    question: 'Γιατί χρειάζομαι τη βοήθεια ενός ειδικού στα εμπορικά σήματα πριν την καταχώριση;',
-    answer: 'Η καταχώριση σήματος χωρίς προηγούμενη νομική μελέτη μπορεί να αποτελέσει "παγίδα πρώτης κατηγορίας" για τον σηματούχο. Τρίτοι μπορούν να αμφισβητήσουν το σήμα με αιτήσεις ακύρωσης, αγωγές ή ποινικές διώξεις. Η εξειδικευμένη συμβουλή εντοπίζει κινδύνους και αυξάνει σημαντικά τις πιθανότητες επιτυχούς άμυνας.',
-  },
-  {
-    question: 'Έχω εμπορικό σήμα. Το καταχώρισα στο Μητρώο Σημάτων. Είμαι ασφαλής;',
-    answer: 'Όχι. Η καταχώριση εμπορικού σήματος δεν εγγυάται ότι τρίτοι δεν θα ζητήσουν ακύρωση, αποζημίωση ή ποινική δίωξη. Η ποιότητα της προεργασίας πριν την καταχώριση είναι κρίσιμη για τη μακροχρόνια ασφάλεια του σήματος.',
-  },
-  {
-    question: 'Κάποιος τρίτος χρησιμοποιεί μια ένδειξη ίδια ή παρόμοια με το σήμα μου. Τι μπορώ να κάνω;',
-    answer: 'Υπάρχουν πολλαπλές δυνατότητες: εξώδικη όχληση (πιο οικονομική αφετηρία), ασφαλιστικά μέτρα (αποτελεσματικά εντός 2-3 ημερών), κύρια αγωγή (αξίωση παύσης, καταστροφής προϊόντων, αποζημίωσης), αίτηση ακύρωσης, καθώς και ποινική δίωξη.',
-  },
-  {
-    question: 'Αμέλησα και δεν καταχώρισα εμπορικό σήμα. Αυτό σημαίνει ότι δεν προστατεύομαι;',
-    answer: 'Η καταχώριση είναι συνιστώμενη πριν την εμπορική χρήση αλλά δεν αποτελεί τον μοναδικό μηχανισμό προστασίας. Μη καταχωρισμένα δικαιώματα προκύπτουν από συνεχή εμπορική χρήση. Ωστόσο, η καταχώριση παρέχει δικονομικά πλεονεκτήματα και πρόσβαση σε ειδικές ποινικές διατάξεις.',
-  },
+  { question: 'Με συμφέρει η κατοχύρωση εμπορικού σήματος;', answer: 'Η κατοχύρωση εμπορικού σήματος αποτελεί μια ιδιαίτερα συμφέρουσα επιλογή για κάθε επιχείρηση. Σύμφωνα με έρευνες, επιχειρήσεις που επενδύουν σε δικαιώματα διανοητικής ιδιοκτησίας παρουσιάζουν αυξημένα έσοδα ανά υπάλληλο κατά 55%. Η Ελλάδα προσφέρει τα χαμηλότερα τέλη καταχώρισης μεταξύ συγκρίσιμων ευρωπαϊκών χωρών, στα 100 ευρώ ανά κλάση.' },
+  { question: 'Τι είναι το εμπορικό σήμα και τι μπορώ να κατοχυρώσω;', answer: 'Σύμφωνα με τον νόμο 4679/2020, εμπορικό σήμα μπορεί να αποτελείται από λέξεις, ονόματα, σχέδια, γράμματα, αριθμούς, χρώματα, σχήμα προϊόντος ή συσκευασίας, ή ήχους, εφόσον μπορούν να διακρίνουν τα προϊόντα ή τις υπηρεσίες μιας επιχείρησης από εκείνα άλλων.' },
+  { question: 'Προστατεύομαι για πάντα; Σε ποιες περιοχές;', answer: 'Η προστασία διαρκεί 10 έτη από την ημερομηνία κατάθεσης, με δυνατότητα ανανέωσης επ\' αόριστον. Εθνικό σήμα (Ελλάδα), σήμα ΕΕ (όλα τα κράτη-μέλη) ή διεθνής καταχώριση.' },
+  { question: 'Γιατί χρειάζομαι ειδικό πριν την καταχώριση;', answer: 'Η καταχώριση σήματος χωρίς προηγούμενη νομική μελέτη μπορεί να αποτελέσει "παγίδα πρώτης κατηγορίας". Τρίτοι μπορούν να αμφισβητήσουν το σήμα με αιτήσεις ακύρωσης, αγωγές ή ποινικές διώξεις.' },
 ];
 
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": faqItems.map(item => ({
-    "@type": "Question",
-    "name": item.question,
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": item.answer,
-    },
-  })),
+  "mainEntity": faqItems.map(item => ({ "@type": "Question", "name": item.question, "acceptedAnswer": { "@type": "Answer", "text": item.answer } })),
 };
-
-const stories = [
-  { title: 'Μια υπόθεση ελληνικών συμφερόντων: η κατοχύρωση εμπορικού σήματος και το συχνότερο λάθος κατά την καταχώριση', url: '/blog/kataxorisi-simatos-elegxos.html', source: 'Naftemporiki' },
-  { title: 'Αλλαγή δεδομένων από το Γενικό Δικαστήριο της ΕΕ: Χρήσιμα συμπεράσματα για τον ΟΒΙ', url: '/blog/OBI-SIMATA-EUIPO.html', source: 'OBI / EUIPO' },
-  { title: 'Οι σύγχρονες μελέτες για την κατοχύρωση εμπορικού σήματος', url: '/blog/katoxirosi-simatos-dhlwsh.html', source: 'HuffingtonPost' },
-  { title: 'Turkaegean: Ο Ατατούρκ και 11 σκέψεις', url: '/blog/emporiko-sima-onoma-turkaegean-euipo-katoxurosi.html', source: 'Analysis' },
-  { title: 'Το εμπορικό σήμα ως περιουσιακό στοιχείο: αριθμοί, προστασία και δύο προτάσεις', url: '/blog/emporiko-sima-dikigoros-kataxorisi-katoxurosi.html', source: 'Startup.gr' },
-  { title: 'Milan AC: Ένας αγώνας που δεν κερδήθηκε και ένα δίδαγμα', url: '/blog/emporiko-sima-EE-EUIPO.html', source: 'EUIPO Case' },
-  { title: 'Όταν το Netflix επιχείρησε να καταχωρίσει το ηχητικό του ως σήμα ΕΕ', url: '/blog/trademark-netflix-euipo.html', source: 'TheTotalBusiness' },
-  { title: 'Η κατοχύρωση του νέου σήματος της Juventus', url: '/blog/trademark-simata-dikigoros-juv.html', source: 'Capital.gr' },
-];
-
-const academicPubs = [
-  { title: 'European Intellectual Property Review', publisher: 'Sweet & Maxwell', url: '/2024/01/european-intellectual-property-review.html', initials: 'EIPR' },
-  { title: 'Kluwer Trademark Blog', publisher: 'Wolters Kluwer N.V.', url: '/2024/01/kluwer-trademark-blog-wolters-kluwer-nv.html', initials: 'KTB' },
-  { title: 'Journal of Intellectual Property Law & Practice', publisher: 'Oxford University Press', url: '/2023/05/journal-of-intellectual-property-law.html', initials: 'JIPLP' },
-  { title: 'Ο κίνδυνος σύγχυσης στο δίκαιο του σήματος', publisher: 'Νομική Βιβλιοθήκη (Monograph)', url: '/2022/09/dikaio-simatwn.html', initials: 'NB' },
-  { title: 'Δίκαιο Τεχνολογίας & Επικοινωνίας (ΔΙΤΕ)', publisher: 'Νομική Βιβλιοθήκη', url: '/2024/02/adwords-google-trademark.html', initials: 'DITE' },
-  { title: 'ΣΥΝΗΓΟΡΟΣ', publisher: 'Νομική Βιβλιοθήκη', url: '/2023/04/blog-post.html', initials: 'SYN' },
-];
 
 const clients = [
   { name: 'Arrena', logo: '/images/client-arrena.jpg' },
@@ -78,21 +52,20 @@ const clients = [
 ];
 ---
 
-<BaseLayout title="Κατοχύρωση Εμπορικού Σήματος" description="Κατοχύρωση εμπορικού σήματος - Δικηγόρος εμπορικών σημάτων | The Trademark Hoop - Psarakis | Kephalas Law Firm. Advice. Registration. Litigation." transparentHeader={true}>
-  <!-- FAQ Schema for SEO -->
+<BaseLayout title="Κατοχύρωση Εμπορικού Σήματος" description="Κατοχύρωση εμπορικού σήματος - Δικηγόρος εμπορικών σημάτων | The Trademark Hoop" transparentHeader={true}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </Fragment>
 
-  <!-- SECTION 1: Hero -->
+  <!-- Hero -->
   <section class="hero-home">
-    <img src="/bg1.jpg" alt="Κατοχύρωση Εμπορικού Σήματος" class="hero-bg-img" />
+    <img src="/bg1.jpg" alt="" class="hero-bg-img" />
     <div class="hero-content">
       <p class="hero-eyebrow">Δικηγόρος Εμπορικών Σημάτων</p>
       <h1 class="hero-h1">Κατοχύρωση, Ένσταση & Ανάκληση<br/>Εμπορικού Σήματος</h1>
       <p class="hero-sub">Εξειδικευμένες νομικές υπηρεσίες εμπορικού σήματος: Κατοχύρωση, ανακοπή (opposition) και διαγραφή (cancellation) σημάτων ανταγωνιστών, αντιδικία παύσης χρήσης τρίτων, εξωδική προστασία σε Ελλάδα και Ευρωπαϊκή Ένωση.</p>
       <form class="hero-email-form" action="https://formsubmit.co/info@thetrademarkhoop.com" method="POST">
-        <input type="hidden" name="_subject" value="Νέο lead από hero - thetrademarkhoop.com" />
+        <input type="hidden" name="_subject" value="Νέο lead - thetrademarkhoop.com" />
         <input type="hidden" name="_next" value="https://www.thetrademarkhoop.com/" />
         <input type="text" name="_honey" style="display:none" />
         <input type="tel" name="phone" placeholder="Συμπληρώστε το τηλέφωνό σας" required />
@@ -123,120 +96,138 @@ const clients = [
     </div>
   </section>
 
-  <!-- SECTION 2: Trusting the Experts -->
-  <section class="section-services" id="services">
+  <!-- NEWS PORTAL: Featured + Feed + Sidebar -->
+  <section class="news-section">
     <div class="container">
-      <div class="services-header">
-        <span class="section-label">The Trademark Hoop:</span>
-        <h2>Trusting the Experts</h2>
-      </div>
-      <div class="services-grid">
-        <div class="services-intro">
-          <p>Το Trademark Hoop είναι το trademark hub της Δικηγορικής Εταιρείας Ψαράκης|Κεφαλάς. Στο Trademark Hoop ασχολούμαστε αποκλειστικά με υποθέσεις εμπορικού σήματος.</p>
-          <p>Ενδεικτικά, οι υπηρεσίες οι οποίες παρέχουμε είναι οι εξής:</p>
-          <ul class="services-list">
-            <li><strong>Κατοχύρωση Εμπορικού Σήματος</strong>Κατάθεση, κατόπιν πλήρους νομικού προελέγχου, δηλώσεων εμπορικών σημάτων σε εθνικό, ενωσιακό (εμπορικό σήμα της Ε.Ε.) και διεθνές επίπεδο (π.χ. ΗΠΑ, Ηνωμένο Βασίλειο, Κίνα κτλ).</li>
-            <li><strong>Σχεδιασμός & Προσαρμογή</strong>Εφόσον είναι αναγκαίο, κατάλληλη προσαρμογή της ένδειξης από επαγγελματίες γραφίστες με τους οποίους διατηρούμε σταθερή συνεργασία, ανά την Ελλάδα, ούτως ώστε να επιτυγχάνεται το βέλτιστο νομικό και εμπορικό αποτέλεσμα.</li>
-            <li><strong>Εξωδικαστική Επίλυση</strong>Εξωδικαστική αντιμετώπιση υποθέσεων που αφορούν σε προσβολή εμπορικού σήματος.</li>
-            <li><strong>Δικαστική Εκπροσώπηση</strong>Ανάληψη υποθέσεων που αφορούν σε δικαστικές διενέξεις στο πεδίο των εμπορικών σημάτων, σε αστικό, σε διοικητικό και σε ποινικό επίπεδο.</li>
-            <li><strong>Νομικές Γνωμοδοτήσεις</strong>Σύνταξη γνωμοδοτήσεων σε σύνθετα ζητήματα του δικαίου των εμπορικών σημάτων, για δικαστική ή ιδία χρήση.</li>
-          </ul>
-        </div>
-        <div class="services-summary">
-          <p>Απόλυτη εξειδίκευση στα ζητήματα εμπορικών σημάτων, συνεχής παρακολούθηση των εξελίξεων, ενεργή παρουσία στην ακαδημαϊκή και επιστημονική κοινότητα. Όλα αυτά συγκεντρωμένα σε υπηρεσίες προσαρμοσμένες στις ιδιαίτερες ανάγκες της κάθε περίπτωσης.</p>
-          <a href="/p/we-do.html" class="btn-primary">Μάθετε περισσότερα</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: Academic Contributions -->
-  <section class="section-academic" id="academic">
-    <div class="container">
-      <h2 class="section-title">Academic Contributions</h2>
-      <p class="section-subtitle">Δημοσιεύσεις του Γιάννη Ψαράκη, ιδρυτή της Trademark Hoop, σε διεθνή και ελληνικά νομικά περιοδικά</p>
-      <div class="academic-grid">
-        {academicPubs.map(pub => (
-          <a href={pub.url} class="academic-item">
-            <span class="pub-logo">{pub.initials}</span>
-            <div>
-              <h3>{pub.title}</h3>
-              <span class="publisher">{pub.publisher}</span>
-            </div>
-          </a>
-        ))}
-      </div>
-      <div class="center-cta">
-        <a href="/p/1.html" class="btn-outline btn-outline-light">Δείτε όλα τα Academic Contributions</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 4: TM Stories -->
-  <section class="section-stories" id="stories">
-    <div class="container">
-      <h2 class="section-title">TM Stories</h2>
-      <p class="section-subtitle">Αρθρογραφία και αναλύσεις σε θέματα εμπορικών σημάτων</p>
-      <div class="stories-grid-home">
-        {stories.map(story => (
-          <a href={story.url} class="story-item">
-            <div class="story-header">
-              <span class="story-logo">{story.source.charAt(0)}</span>
-              <span class="story-source-badge">{story.source}</span>
-            </div>
-            <h3>{story.title}</h3>
-          </a>
-        ))}
-      </div>
-      <div class="center-cta">
-        <a href="/blog/" class="btn-outline">Δείτε όλα τα TM Stories</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION: Clients -->
-  <section class="section-clients" id="clients">
-    <div class="container">
-      <h2 class="section-title">Εταιρίες που μας εμπιστεύτηκαν</h2>
-      <p class="section-subtitle">Επιχειρήσεις και οργανισμοί που επέλεξαν το Trademark Hoop για την προστασία των σημάτων τους</p>
-      <div class="clients-grid">
-        {clients.map((client) => (
-          <div class="client-item">
-            {client.logo ? (
-              <img src={client.logo} alt={client.name} class="client-logo" />
-            ) : (
-              <span class="client-placeholder">{client.name}</span>
-            )}
+      <!-- Featured Post Banner -->
+      {featuredPost && (
+        <a href={`/blog/${featuredPost.slug}`} class="featured-post">
+          {featuredPost.image && <img src={featuredPost.image} alt={featuredPost.title} class="featured-img" />}
+          <div class="featured-overlay">
+            <span class="featured-badge">Πρόσφατο</span>
+            <h2>{featuredPost.title}</h2>
+            <p>{excerpt(featuredPost.content, 200)}</p>
+            <span class="featured-meta">{featuredPost.date} &bull; {featuredPost.author}</span>
           </div>
-        ))}
+        </a>
+      )}
+
+      <!-- Banner 1 -->
+      <div class="home-banner">
+        <a href="/p/blog-page_8.html" class="banner-inner">
+          <span class="banner-text">Χρειάζεστε κατοχύρωση εμπορικού σήματος; Επικοινωνήστε μαζί μας σήμερα.</span>
+          <span class="banner-btn">Συνεργάσου μαζί μας</span>
+        </a>
       </div>
-      <div class="center-cta">
-        <a href="/p/who.html" class="btn-outline">Όλες οι εταιρείες</a>
+
+      <div class="news-grid">
+        <!-- Main Feed -->
+        <div class="news-feed">
+          <h2 class="feed-title">Τελευταία Άρθρα</h2>
+          {feedPosts.map((post: any) => (
+            <a href={`/blog/${post.slug}`} class="feed-item">
+              <div class="feed-item-body">
+                <span class="feed-date">{post.date}</span>
+                <h3>{post.title}</h3>
+                <p class="feed-excerpt">{excerpt(post.content)}</p>
+                <span class="feed-author">{post.author}</span>
+              </div>
+              {post.image && (
+                <div class="feed-item-thumb">
+                  <img src={post.image} alt={post.title} loading="lazy" />
+                </div>
+              )}
+            </a>
+          ))}
+          <div style="margin-top: 24px;">
+            <a href="/blog/" class="btn-outline">Όλα τα άρθρα</a>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="news-sidebar">
+          <!-- CTA Widget -->
+          <div class="sidebar-widget sidebar-cta">
+            <h4>Κατοχύρωση Σήματος</h4>
+            <p>Προστατεύστε το brand σας. Δωρεάν αρχική αξιολόγηση.</p>
+            <a href="/p/blog-page_8.html" class="sidebar-btn">Επικοινωνία</a>
+          </div>
+
+          <!-- Categories -->
+          <div class="sidebar-widget">
+            <h4>Κατηγορίες</h4>
+            <a href="/category/katochyrosi" class="sidebar-cat">Κατοχύρωση Σήματος</a>
+            <a href="/category/anakopi" class="sidebar-cat">Ανακοπή Σήματος</a>
+            <a href="/case-studies" class="sidebar-cat">Case Studies</a>
+            <a href="/blog/" class="sidebar-cat">Όλα τα άρθρα</a>
+          </div>
+
+          <!-- Tags Cloud -->
+          <div class="sidebar-widget">
+            <h4>Tags</h4>
+            <div class="sidebar-tags">
+              {tags.map((tag: any) => (
+                <span class="sidebar-tag">{tag.name}</span>
+              ))}
+            </div>
+          </div>
+
+          <!-- Banner 2 -->
+          <div class="sidebar-widget sidebar-banner">
+            <a href="/case-studies">
+              <span class="sidebar-banner-label">Case Studies</span>
+              <span class="sidebar-banner-title">Netflix, Juventus, Milan AC & more</span>
+            </a>
+          </div>
+
+          <!-- Clients -->
+          <div class="sidebar-widget">
+            <h4>Μας εμπιστεύτηκαν</h4>
+            <div class="sidebar-clients">
+              {clients.slice(0, 6).map(client => (
+                <div class="sidebar-client">
+                  {client.logo && <img src={client.logo} alt={client.name} />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="sidebar-widget">
+            <h4>Επικοινωνία</h4>
+            <p style="font-size:0.82rem;color:var(--text-gray);margin-bottom:8px;">Λυκαβηττού 2, Κολωνάκι</p>
+            <p style="font-size:0.82rem;color:var(--text-gray);margin-bottom:8px;">T: <a href="tel:+302130464985">213 046 4985</a></p>
+            <p style="font-size:0.82rem;color:var(--text-gray);"><a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a></p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Banner 3 - Full Width -->
+      <div class="home-banner home-banner-dark">
+        <a href="/category/anakopi" class="banner-inner">
+          <span class="banner-text">Ανακοπή εμπορικού σήματος; Μάθετε τα δικαιώματά σας.</span>
+          <span class="banner-btn">Μάθετε περισσότερα</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 5: FAQ with Schema -->
+  <!-- FAQ -->
   <section class="section-faq" id="faq">
     <div class="container">
-      <h2 class="section-title">Συχνές Ερωτήσεις (FAQ)</h2>
+      <h2 class="section-title">Συχνές Ερωτήσεις</h2>
       <div class="faq-list">
         {faqItems.map((item, i) => (
           <details class="faq-accordion" open={i === 0}>
             <summary>{item.question}</summary>
-            <div class="faq-answer">
-              <p>{item.answer}</p>
-            </div>
+            <div class="faq-answer"><p>{item.answer}</p></div>
           </details>
         ))}
-      </div>
-      <div class="center-cta">
-        <a href="/p/trademark-hoop.html" class="btn-outline">Δείτε όλες τις ερωτήσεις</a>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 6: Contact -->
+  <!-- Contact -->
   <section class="section-contact" id="contact">
     <div class="container">
       <div class="contact-grid">
@@ -244,27 +235,15 @@ const clients = [
           <h2>Επικοινωνήστε μαζί μας</h2>
           <p class="contact-desc">Συμπληρώστε τη φόρμα ή επικοινωνήστε απευθείας μαζί μας.</p>
           <div class="contact-details">
-            <div class="contact-detail">
-              <strong>Διεύθυνση</strong>
-              <span>Λυκαβηττού 2, Κολωνάκι</span>
-            </div>
-            <div class="contact-detail">
-              <strong>Τηλέφωνο</strong>
-              <span>213 046 4985</span>
-            </div>
-            <div class="contact-detail">
-              <strong>Κινητό</strong>
-              <span>693 27 87 671</span>
-            </div>
-            <div class="contact-detail">
-              <strong>Email</strong>
-              <a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a>
-            </div>
+            <div class="contact-detail"><strong>Διεύθυνση</strong><span>Λυκαβηττού 2, Κολωνάκι</span></div>
+            <div class="contact-detail"><strong>Τηλέφωνο</strong><span>213 046 4985</span></div>
+            <div class="contact-detail"><strong>Κινητό</strong><span>693 27 87 671</span></div>
+            <div class="contact-detail"><strong>Email</strong><a href="mailto:info@thetrademarkhoop.com">info@thetrademarkhoop.com</a></div>
           </div>
         </div>
-        <form class="contact-form-home" action="https://formsubmit.co/info@thetrademarkhoop.com" method="POST" id="contactForm">
+        <form class="contact-form-home" action="https://formsubmit.co/info@thetrademarkhoop.com" method="POST">
           <input type="hidden" name="_captcha" value="true" />
-          <input type="hidden" name="_subject" value="Νέο μήνυμα από thetrademarkhoop.com" />
+          <input type="hidden" name="_subject" value="Νέο μήνυμα - thetrademarkhoop.com" />
           <input type="hidden" name="_next" value="https://www.thetrademarkhoop.com/" />
           <input type="text" name="_honey" style="display:none" />
           <input type="text" name="name" placeholder="Όνομα" required />
@@ -272,8 +251,8 @@ const clients = [
           <input type="tel" name="phone" placeholder="Τηλέφωνο (προαιρετικό)" />
           <textarea name="message" placeholder="Μήνυμα" required></textarea>
           <label class="form-consent">
-            <input type="checkbox" id="consentCheck" required />
-            <span>Αποδέχομαι τους <a href="/p/trademark-hoop_26.html" target="_blank">Όρους Χρήσης</a> και την <a href="/p/trademark-hoop_26.html" target="_blank">Πολιτική Απορρήτου</a>. Συναινώ στη συλλογή και επεξεργασία των δεδομένων μου σύμφωνα με τον GDPR για τον σκοπό της επικοινωνίας.</span>
+            <input type="checkbox" required />
+            <span>Αποδέχομαι τους <a href="/p/trademark-hoop_26.html" target="_blank">Όρους Χρήσης</a> και την <a href="/p/trademark-hoop_26.html" target="_blank">Πολιτική Απορρήτου</a>.</span>
           </label>
           <button type="submit">Αποστολή</button>
         </form>
