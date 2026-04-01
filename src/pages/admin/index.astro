@@ -6,6 +6,7 @@ const cookie = Astro.cookies.get('admin_session')?.value;
 let loggedIn = cookie === 'authenticated';
 let posts: any[] = [];
 let categories: any[] = [];
+let tags: any[] = [];
 let error = '';
 let success = '';
 
@@ -55,10 +56,29 @@ if (Astro.request.method === 'POST') {
     const categoryId = form.get('category_id')?.toString() || null;
     const image = form.get('image')?.toString() || null;
     try {
-      await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, published) VALUES (?, ?, ?, ?, ?, ?, ?, 1)').bind(title, slug, content, author, date, categoryId, image).run();
+      const res = await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, published) VALUES (?, ?, ?, ?, ?, ?, ?, 1) RETURNING id').bind(title, slug, content, author, date, categoryId, image).first();
+      const postId = (res as any)?.id;
+      const tagIds = form.getAll('tag_ids');
+      if (postId && tagIds.length) {
+        for (const tid of tagIds) {
+          await db.prepare('INSERT OR IGNORE INTO post_tags (post_id, tag_id) VALUES (?, ?)').bind(postId, tid).run();
+        }
+      }
       success = 'Post created!';
     } catch(e: any) {
       error = e.message || 'Failed to create post';
+    }
+  }
+
+  if (action === 'add_tag' && loggedIn && db) {
+    const tagName = form.get('new_tag')?.toString() || '';
+    if (tagName) {
+      try {
+        await db.prepare('INSERT INTO tags (name) VALUES (?)').bind(tagName).run();
+        success = 'Tag added!';
+      } catch(e: any) {
+        error = e.message || 'Failed to add tag';
+      }
     }
   }
 
@@ -76,6 +96,8 @@ if (loggedIn && db) {
   posts = result.results || [];
   const catResult = await db.prepare('SELECT id, name, slug FROM categories ORDER BY name').all();
   categories = catResult.results || [];
+  const tagResult = await db.prepare('SELECT id, name FROM tags ORDER BY name').all();
+  tags = tagResult.results || [];
 }
 ---
 
@@ -207,6 +229,26 @@ if (loggedIn && db) {
                 ">+ Add</button>
               </div>
             </div>
+          </div>
+          <label>Tags</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            {tags.map((tag: any) => (
+              <label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:#0d2440;border:1px solid #2d5a7b;border-radius:16px;font-size:0.75rem;cursor:pointer;">
+                <input type="checkbox" name="tag_ids" value={tag.id} style="width:14px;height:14px;accent-color:#fb6412;" />
+                {tag.name}
+              </label>
+            ))}
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:16px;">
+            <input type="text" id="newTagInput" placeholder="New tag" style="flex:1;margin-bottom:0;" />
+            <button type="button" class="btn btn-outline" style="white-space:nowrap;padding:10px 16px;" onclick="
+              const inp = document.getElementById('newTagInput');
+              if (!inp.value) return;
+              const fd = new FormData();
+              fd.append('action', 'add_tag');
+              fd.append('new_tag', inp.value);
+              fetch('/admin/', { method: 'POST', body: fd }).then(() => location.reload());
+            ">+ Tag</button>
           </div>
           <label>Featured Image</label>
           <div class="image-upload" id="imageUploadArea" onclick="document.getElementById('imageFile').click()">
