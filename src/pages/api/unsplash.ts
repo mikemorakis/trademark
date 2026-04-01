@@ -13,7 +13,7 @@ export const GET: APIRoute = async ({ request, cookies }) => {
   try {
     // Use Pexels API (free, 200 req/hour, no billing required)
     // Get a free key at https://www.pexels.com/api/new/
-    const PEXELS_KEY = 'PASTE_YOUR_PEXELS_KEY_HERE';
+    const PEXELS_KEY = 'TUK6LaIfguxrDcKVU8IEbHoSxPadPhKT4cDCIXiAeetk2UwqvaVKUKgV';
 
     const res = await fetch(
       `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=12&page=${page}&orientation=landscape`,
