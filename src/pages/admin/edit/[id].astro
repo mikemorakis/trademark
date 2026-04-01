@@ -1,5 +1,6 @@
 ---
-const db = Astro.locals.runtime?.env?.DB;
+import { env } from "cloudflare:workers";
+const db = env.DB;
 const cookie = Astro.cookies.get('admin_session')?.value;
 if (cookie !== 'authenticated') return Astro.redirect('/admin/');
 

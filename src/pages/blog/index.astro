@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { env } from "cloudflare:workers";
 
-const db = Astro.locals.runtime?.env?.DB;
+const db = env.DB;
 let posts: any[] = [];
 if (db) {
   const result = await db.prepare('SELECT id, title, slug, date, author, description FROM posts WHERE published = 1 ORDER BY date DESC').all();
