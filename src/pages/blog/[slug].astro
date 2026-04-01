@@ -100,7 +100,12 @@ for (let i = openTags.length - 1; i >= 0; i--) safeContent += `</${openTags[i]}>
 </BaseLayout>
 
 <style is:inline>
-  .post-layout { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
+  .post-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; }
+  .single-post { min-width: 0; overflow: hidden; }
+  .post-content { overflow-wrap: break-word; word-wrap: break-word; }
+  .post-content img { max-width: 100%; height: auto; }
+  .post-content table { max-width: 100%; overflow-x: auto; display: block; }
+  .post-content p, .post-content li, .post-content blockquote { max-width: 100%; }
   .post-sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 80px; }
   .ps-widget { background: #fff; border-radius: 10px; padding: 22px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .ps-widget h4 { font-size: 0.8rem; color: #0f2d4a; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #fb6412; }
