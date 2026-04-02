@@ -17,8 +17,8 @@ if (Astro.request.method === 'POST' && db) {
   const date = form.get('date')?.toString() || '';
   const author = form.get('author')?.toString() || 'Giannis Psarakis';
   try {
-    await db.prepare('UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, updated_at=datetime(?) WHERE id=?')
-      .bind(title, slug, content, date, author, 'now', id).run();
+    await db.prepare("UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, updated_at=datetime('now') WHERE id=?")
+      .bind(title, slug, content, date, author, id).run();
     success = 'Post updated!';
   } catch(e: any) {
     error = e.message || 'Failed to update';
@@ -26,7 +26,7 @@ if (Astro.request.method === 'POST' && db) {
 }
 
 if (db && id) {
-  post = await db.prepare('SELECT * FROM posts WHERE id = ?').bind(id).first();
+  post = await db.prepare('SELECT * FROM posts WHERE id = ?').bind(id).first() as any;
 }
 
 if (!post) return Astro.redirect('/admin/');
@@ -73,7 +73,7 @@ if (!post) return Astro.redirect('/admin/');
     {success && <div class="alert alert-success">{success}</div>}
 
     <div class="card">
-      <form method="POST">
+      <form method="POST" onsubmit="document.getElementById('contentField').value=quill.root.innerHTML;">
         <label>Title</label>
         <input type="text" name="title" value={post.title} required />
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
