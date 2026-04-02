@@ -1,4 +1,6 @@
 ---
+import { env } from "cloudflare:workers";
+
 interface Props {
   title: string;
   description?: string;
@@ -6,6 +8,21 @@ interface Props {
 }
 
 const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Registration. Litigation.', transparentHeader = false } = Astro.props;
+
+let navCategories: any[] = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const result = await db.prepare(`
+      SELECT c.name, c.slug, COUNT(p.id) as post_count
+      FROM categories c
+      JOIN posts p ON p.category_id = c.id AND p.published = 1
+      GROUP BY c.id
+      ORDER BY c.name
+    `).all();
+    navCategories = result.results || [];
+  }
+} catch(e) {}
 ---
 
 <html lang="el">
@@ -54,11 +71,9 @@ const { title, description = 'Hoop it. Don\'t get hooped. Legally. | Advice. Reg
           <button class="nav-close" id="navClose" aria-label="Close menu">&times;</button>
         </div>
         <div class="nav-links">
-          <a href="/category/brands-marketing">Brands & Marketing</a>
-          <a href="/category/industry-experts">Industry Experts</a>
-          <a href="/category/trademarks-legal">Trademarks & Legal</a>
-          <a href="/category/news">News</a>
-          <a href="/category/contributors">Contributors</a>
+          {navCategories.map((cat: any) => (
+            <a href={`/category/${cat.slug}`}>{cat.name}</a>
+          ))}
           <a href="/p/blog-page_8.html" class="nav-btn-cta">Συνεργάσου μαζί μας</a>
         </div>
         <hr class="nav-mobile-hr" />
