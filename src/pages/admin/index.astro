@@ -262,7 +262,10 @@ if (loggedIn && db) {
           </div>
           <div id="unsplashResults" style="display:none;margin-bottom:16px;">
             <div id="unsplashGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;"></div>
-            <p id="unsplashCredit" style="font-size:0.68rem;color:#6b7280;margin-top:8px;"></p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+              <p id="unsplashCredit" style="font-size:0.68rem;color:#6b7280;"></p>
+              <button type="button" id="unsplashLoadMore" class="btn btn-outline" style="font-size:0.65rem;padding:6px 14px;display:none;">Load More</button>
+            </div>
           </div>
           <div id="imagePreview" style="margin-bottom:16px;"></div>
 
@@ -305,43 +308,63 @@ if (loggedIn && db) {
     </div>
     <script is:inline src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script is:inline>
-      // Unsplash search
-      document.getElementById('unsplashSearchBtn').addEventListener('click', async function() {
-        var q = document.getElementById('unsplashQuery').value;
-        if (!q) q = 'trademark law';
+      // Unsplash/Pexels search
+      var unsplashPage = 1;
+      var unsplashQuery = '';
+
+      function addImagesToGrid(images, grid) {
+        images.forEach(function(img) {
+          var div = document.createElement('div');
+          div.style.cssText = 'cursor:pointer;border-radius:6px;overflow:hidden;height:80px;border:2px solid transparent;transition:border-color 0.2s;';
+          div.innerHTML = '<img src="' + img.thumb + '" style="width:100%;height:100%;object-fit:cover;" />';
+          div.addEventListener('click', function() {
+            document.getElementById('imageUrl').value = img.small;
+            document.getElementById('imagePreview').innerHTML = '<img src="' + img.small + '" style="max-height:150px;border-radius:8px;" /><p style="font-size:0.7rem;color:#16a34a;margin-top:6px;">Photo by <a href="' + img.authorUrl + '?utm_source=trademarkhoop&utm_medium=referral" target="_blank" style="color:#fb6412;">' + img.author + '</a> on <a href="https://pexels.com" target="_blank" style="color:#fb6412;">Pexels</a></p>';
+            grid.querySelectorAll('div').forEach(function(d) { d.style.borderColor = 'transparent'; });
+            div.style.borderColor = '#fb6412';
+          });
+          grid.appendChild(div);
+        });
+      }
+
+      async function searchPexels(page) {
+        var q = document.getElementById('unsplashQuery').value || 'trademark law';
+        unsplashQuery = q;
         var grid = document.getElementById('unsplashGrid');
         var wrap = document.getElementById('unsplashResults');
         var credit = document.getElementById('unsplashCredit');
-        grid.innerHTML = '<p style="color:#9ca3af;grid-column:1/-1;">Searching...</p>';
+        var loadMore = document.getElementById('unsplashLoadMore');
+        if (page === 1) grid.innerHTML = '<p style="color:#9ca3af;grid-column:1/-1;">Searching...</p>';
         wrap.style.display = 'block';
         try {
-          var res = await fetch('/api/unsplash?q=' + encodeURIComponent(q), { credentials: 'same-origin' });
+          var res = await fetch('/api/unsplash?q=' + encodeURIComponent(q) + '&page=' + page, { credentials: 'same-origin' });
           var data = await res.json();
           if (data.images && data.images.length) {
-            grid.innerHTML = '';
-            data.images.forEach(function(img) {
-              var div = document.createElement('div');
-              div.style.cssText = 'cursor:pointer;border-radius:6px;overflow:hidden;height:80px;border:2px solid transparent;transition:border-color 0.2s;';
-              div.innerHTML = '<img src="' + img.thumb + '" style="width:100%;height:100%;object-fit:cover;" />';
-              div.addEventListener('click', function() {
-                document.getElementById('imageUrl').value = img.small;
-                document.getElementById('imagePreview').innerHTML = '<img src="' + img.small + '" style="max-height:150px;border-radius:8px;" /><p style="font-size:0.7rem;color:#16a34a;margin-top:6px;">Photo by <a href="' + img.authorUrl + '?utm_source=trademarkhoop&utm_medium=referral" target="_blank" style="color:#fb6412;">' + img.author + '</a> on <a href="https://unsplash.com/?utm_source=trademarkhoop&utm_medium=referral" target="_blank" style="color:#fb6412;">Unsplash</a></p>';
-                grid.querySelectorAll('div').forEach(function(d) { d.style.borderColor = 'transparent'; });
-                div.style.borderColor = '#fb6412';
-              });
-              grid.appendChild(div);
-            });
-            credit.textContent = data.total + ' results from Unsplash';
+            if (page === 1) grid.innerHTML = '';
+            addImagesToGrid(data.images, grid);
+            credit.textContent = data.total + ' results from Pexels';
+            loadMore.style.display = data.images.length >= 12 ? 'inline-block' : 'none';
           } else {
-            grid.innerHTML = '<p style="color:#9ca3af;grid-column:1/-1;">No results found</p>';
+            if (page === 1) grid.innerHTML = '<p style="color:#9ca3af;grid-column:1/-1;">No results found</p>';
+            loadMore.style.display = 'none';
           }
         } catch(err) {
-          grid.innerHTML = '<p style="color:#dc2626;grid-column:1/-1;">Search failed</p>';
+          if (page === 1) grid.innerHTML = '<p style="color:#dc2626;grid-column:1/-1;">Search failed</p>';
         }
+      }
+
+      document.getElementById('unsplashSearchBtn').addEventListener('click', function() {
+        unsplashPage = 1;
+        searchPexels(1);
       });
-      // Enter key triggers search
+
+      document.getElementById('unsplashLoadMore').addEventListener('click', function() {
+        unsplashPage++;
+        searchPexels(unsplashPage);
+      });
+
       document.getElementById('unsplashQuery').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('unsplashSearchBtn').click(); }
+        if (e.key === 'Enter') { e.preventDefault(); unsplashPage = 1; searchPexels(1); }
       });
 
       document.getElementById('imageFile').addEventListener('change', async function(e) {
