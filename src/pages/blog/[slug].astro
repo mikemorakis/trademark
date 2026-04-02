@@ -43,7 +43,7 @@ for (let i = openTags.length - 1; i >= 0; i--) safeContent += `</${openTags[i]}>
         <div class="post-content" set:html={safeContent}></div>
         {tags.length > 0 && (
           <div class="post-tags-list">
-            {tags.map((t: any) => <span class="post-tag-pill">{t.name}</span>)}
+            {tags.map((t: any) => <a href={`/tag/${encodeURIComponent(t.name)}`} class="post-tag-pill">{t.name}</a>)}
           </div>
         )}
         <div style="margin-top: 40px;">

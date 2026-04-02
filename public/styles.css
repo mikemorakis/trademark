@@ -2113,6 +2113,13 @@ html, body {
   border-radius: 14px;
   font-weight: 600;
   letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.sidebar-tag:hover {
+  background: var(--orange);
+  color: #fff;
 }
 
 /* Sidebar Banner */
@@ -2338,7 +2345,8 @@ html, body {
 .ps-cta h4 { color: #fff; border-bottom-color: rgba(255,255,255,0.3); }
 .ps-cta p { color: rgba(255,255,255,0.85); font-size: 0.85rem; margin-bottom: 14px; }
 .post-tags-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; }
-.post-tag-pill { display: inline-block; padding: 4px 12px; background: #f3f4f6; color: #4b5563; font-size: 0.72rem; border-radius: 14px; font-weight: 600; }
+.post-tag-pill { display: inline-block; padding: 4px 12px; background: #f3f4f6; color: #4b5563; font-size: 0.72rem; border-radius: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+.post-tag-pill:hover { background: #fb6412; color: #fff; }
 
 /* Cookie Consent Bar */
 .cookie-bar {

@@ -128,7 +128,7 @@ const clients = [
             <h4>Tags</h4>
             <div class="sidebar-tags">
               {tags.map((tag: any) => (
-                <span class="sidebar-tag">{tag.name}</span>
+                <a href={`/tag/${encodeURIComponent(tag.name)}`} class="sidebar-tag">{tag.name}</a>
               ))}
             </div>
           </div>

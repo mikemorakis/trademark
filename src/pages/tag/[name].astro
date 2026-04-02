@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArchivePage from '../../components/ArchivePage.astro';
+import { env } from "cloudflare:workers";
+
+const { name } = Astro.params;
+const db = env.DB;
+let posts: any[] = [];
+const tagName = decodeURIComponent(name || '');
+
+if (db && tagName) {
+  const result = await db.prepare(`
+    SELECT DISTINCT p.id, p.title, p.slug, p.date, p.author, p.image, p.content
+    FROM posts p JOIN post_tags pt ON p.id = pt.post_id JOIN tags t ON pt.tag_id = t.id
+    WHERE p.published = 1 AND t.name = ?
+    ORDER BY p.date DESC
+  `).bind(tagName).all();
+  posts = result.results || [];
+}
+---
+
+<BaseLayout title={tagName} description={`Άρθρα με tag: ${tagName}`}>
+  <section class="news-section">
+    <div class="container">
+      <ArchivePage title={tagName} description={`Άρθρα με tag: ${tagName}`} posts={posts} />
+    </div>
+  </section>
+</BaseLayout>
