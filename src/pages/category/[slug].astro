@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArchivePage from '../../components/ArchivePage.astro';
+import { env } from "cloudflare:workers";
+
+const { slug } = Astro.params;
+const db = env.DB;
+let posts: any[] = [];
+let category: any = null;
+
+if (db && slug) {
+  category = await db.prepare('SELECT * FROM categories WHERE slug = ?').bind(slug).first();
+  if (category) {
+    const result = await db.prepare(`
+      SELECT id, title, slug, date, author, image, content
+      FROM posts WHERE published = 1 AND category_id = ?
+      ORDER BY date DESC
+    `).bind(category.id).all();
+    posts = result.results || [];
+  }
+}
+
+const title = category?.name || slug || 'Category';
+---
+
+<BaseLayout title={title} description={`Άρθρα στην κατηγορία: ${title}`}>
+  <section class="news-section">
+    <div class="container">
+      <ArchivePage title={title} description={`Άρθρα στην κατηγορία: ${title}`} posts={posts} />
+    </div>
+  </section>
+</BaseLayout>
