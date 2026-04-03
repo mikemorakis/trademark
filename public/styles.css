@@ -3064,9 +3064,10 @@ main {
     flex-direction: column;
   }
 
-  /* Sidebar banners margins on mobile */
+  /* Sidebar banners on mobile */
   .sidebar-cta, .sidebar-elearning, .ps-banner-b2b, .ps-banner-partner {
-    margin: 0 16px;
+    margin: 0;
+    padding: 24px 20px;
   }
 
   /* Footer mobile */
