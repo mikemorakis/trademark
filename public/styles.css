@@ -1803,7 +1803,7 @@ html, body {
 
 /* News Portal - Homepage */
 .news-section {
-  padding: 48px 0 0;
+  padding: 48px 0 80px;
 }
 
 .featured-post {
