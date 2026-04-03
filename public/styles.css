@@ -3058,9 +3058,28 @@ main {
     order: 2;
   }
 
-  /* Footer mobile margins */
+  /* Footer mobile */
   .site-footer {
     padding: 0 16px;
+    text-align: center;
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+
+  .footer-section a {
+    text-align: center;
+  }
+
+  /* Feed side margins on mobile */
+  .news-feed, .news-sidebar {
+    padding: 0 16px !important;
+  }
+
+  .feed-title {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .footer-top-inner {
