@@ -2435,12 +2435,14 @@ main {
     grid-template-columns: 1fr;
   }
 
-  .mag-featured-img {
-    min-height: 280px;
+  .mag-featured, .mag-featured-img {
+    position: relative;
+    height: auto;
+    min-height: 300px;
   }
 
   .mag-featured-placeholder {
-    min-height: 280px;
+    min-height: 300px;
   }
 
   .mag-featured-body {
