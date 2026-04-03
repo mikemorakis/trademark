@@ -52,7 +52,13 @@ const faqSchema = {
         {featuredPost && (
           <a href={`/blog/${featuredPost.slug}`} class="mag-featured">
             <div class="mag-featured-img">
-              {featuredPost.image ? <img src={featuredPost.image} alt={featuredPost.title} fetchpriority="high" width="800" height="480" /> : <div class="mag-featured-placeholder"></div>}
+              {featuredPost.image ? (
+              <picture>
+                <source srcset={featuredPost.image} type="image/avif" />
+                <source srcset={featuredPost.image} type="image/webp" />
+                <img src={featuredPost.image} alt={featuredPost.title} fetchpriority="high" width="800" height="480" />
+              </picture>
+            ) : <div class="mag-featured-placeholder"></div>}
             </div>
             <div class="mag-featured-body">
               <span class="mag-category-badge">Πρόσφατο</span>
@@ -108,7 +114,11 @@ const faqSchema = {
               </div>
               {post.image && (
                 <div class="feed-item-thumb">
-                  <img src={post.image} alt={post.title} loading="lazy" />
+                  <picture>
+                    <source srcset={post.image} type="image/avif" />
+                    <source srcset={post.image} type="image/webp" />
+                    <img src={post.image} alt={post.title} loading="lazy" />
+                  </picture>
                 </div>
               )}
             </a>

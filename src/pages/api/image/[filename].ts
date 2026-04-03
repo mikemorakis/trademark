@@ -12,14 +12,21 @@ export const GET: APIRoute = async ({ params, request }) => {
     }
 
     const binary = Uint8Array.from(atob(row.data), c => c.charCodeAt(0));
-
-    // Check if browser accepts WebP
     const accept = request.headers.get('Accept') || '';
-    const supportsWebP = accept.includes('image/webp');
+
+    // Content negotiation: prefer AVIF > WebP > original
+    let contentType = row.mime;
+    if (row.mime !== 'image/svg+xml') {
+      if (accept.includes('image/avif')) {
+        contentType = 'image/avif';
+      } else if (accept.includes('image/webp')) {
+        contentType = 'image/webp';
+      }
+    }
 
     return new Response(binary, {
       headers: {
-        'Content-Type': supportsWebP && row.mime !== 'image/svg+xml' ? 'image/webp' : row.mime,
+        'Content-Type': contentType,
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Vary': 'Accept',
       },
