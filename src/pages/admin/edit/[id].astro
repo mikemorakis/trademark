@@ -131,7 +131,7 @@ if (!post) return Astro.redirect('/admin/');
       }
     });
   </script>
-  <script is:inline define:vars={{ postContent: post.content }}>
+  <script is:inline>
     window.editQuill = new Quill('#editor', {
       theme: 'snow',
       modules: {
@@ -145,7 +145,10 @@ if (!post) return Astro.redirect('/admin/');
         ]
       }
     });
-    window.editQuill.root.innerHTML = postContent;
+    var contentField = document.getElementById('contentField');
+    if (contentField && contentField.value) {
+      window.editQuill.root.innerHTML = contentField.value;
+    }
   </script>
 </body>
 </html>
