@@ -3066,8 +3066,8 @@ main {
 
   /* Sidebar banners on mobile */
   .sidebar-cta, .sidebar-elearning, .ps-banner-b2b, .ps-banner-partner {
-    margin: 0 16px;
-    padding: 28px 24px;
+    margin: 8px 16px;
+    padding: 28px 28px;
   }
 
   /* Top margin on archive/content pages */
