@@ -62,8 +62,17 @@ const faqSchema = {
           </a>
         )}
 
-        <!-- Hot This Week (Right) -->
-        <div class="mag-hot">
+        <!-- Right Column -->
+        <div class="mag-right">
+          <!-- E-Learning Banner -->
+          <div class="mag-elearning">
+            <span class="sidebar-elearning-badge">E-Learning Course</span>
+            <h4>Κατοχύρωση εμπορικού σήματος και αποτελεσματική προστασία του</h4>
+            <p>από τη Νομική Βιβλιοθήκη</p>
+            <a href="https://www.nb.org" target="_blank" rel="noopener" class="sidebar-elearning-btn">Μάθε περισσότερα</a>
+          </div>
+
+          <!-- Δημοφιλή Νέα -->
           <h3 class="mag-hot-title">Δημοφιλή Νέα</h3>
           <div class="mag-hot-list">
             {hotPosts.map((post: any, i: number) => (
@@ -107,13 +116,6 @@ const faqSchema = {
 
         <!-- Sidebar -->
         <aside class="news-sidebar">
-          <div class="sidebar-widget sidebar-elearning">
-            <span class="sidebar-elearning-badge">E-Learning Course</span>
-            <h4>Κατοχύρωση εμπορικού σήματος και αποτελεσματική προστασία του</h4>
-            <p>από τη Νομική Βιβλιοθήκη</p>
-            <a href="https://www.nb.org" target="_blank" rel="noopener" class="sidebar-elearning-btn">Μάθε περισσότερα</a>
-          </div>
-
           <div class="sidebar-widget sidebar-cta">
             <h4>Guest Blogging</h4>
             <p>Γράψε για εμάς! Δημοσίευσε το άρθρο σου στο Trademark Hoop.</p>

@@ -1904,20 +1904,64 @@ main {
   font-size: 0.72rem;
 }
 
+/* Right Column */
+.mag-right {
+  border-left: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+}
+
+.mag-elearning {
+  background: linear-gradient(135deg, #002141, #0a3560);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mag-elearning::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 100px;
+  height: 100px;
+  background: rgba(255,107,74,0.15);
+  border-radius: 0;
+  pointer-events: none;
+}
+
+.mag-elearning h4 {
+  color: #fff;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  margin: 0 0 8px;
+  letter-spacing: 0;
+  text-transform: none;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.mag-elearning p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.75rem;
+  font-style: italic;
+  margin-bottom: 14px;
+}
+
 /* Hot This Week */
 .mag-hot {
   background: #fff;
-  border-left: 1px solid #e5e7eb;
   padding: 28px 28px;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .mag-hot-title {
   font-size: 1.1rem;
   color: var(--navy);
-  margin-bottom: 20px;
-  padding-bottom: 12px;
+  margin: 0 28px 16px;
+  padding: 24px 0 12px;
   border-bottom: 3px solid var(--orange);
   font-weight: 700;
 }
@@ -1933,7 +1977,7 @@ main {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 0;
+  padding: 16px 28px;
   border-bottom: 1px solid var(--gray);
   text-decoration: none;
   transition: background 0.2s;
@@ -2391,7 +2435,7 @@ main {
     font-size: 1.2rem;
   }
 
-  .mag-hot {
+  .mag-right {
     border-left: none;
     border-top: 1px solid var(--gray);
   }
