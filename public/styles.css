@@ -32,7 +32,7 @@ body {
   font-family: var(--font-body);
   font-weight: 400;
   color: var(--text-dark);
-  background: var(--off-white);
+  background: #002141;
   line-height: 1.75;
   font-size: 15px;
   letter-spacing: 0.01em;
@@ -72,6 +72,13 @@ img {
   padding: 0 24px;
 }
 
+.container-white {
+  max-width: 1140px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 0;
+}
+
 .site-footer .container {
   max-width: 1140px;
   padding: 0 24px;
@@ -84,12 +91,12 @@ img {
 
 /* Header */
 .site-header {
-  background: var(--navy);
+  background: #002141;
   padding: 16px 0;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   transition: background 0.4s, box-shadow 0.4s;
 }
 
@@ -934,8 +941,8 @@ html, body {
 
 /* Section 6: Contact */
 .section-contact {
-  padding: 100px 0;
-  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%);
+  padding: 60px 24px;
+  background: #fff;
 }
 
 .contact-grid {
@@ -947,12 +954,12 @@ html, body {
 
 .contact-info h2 {
   font-size: 2rem;
-  color: var(--white);
+  color: var(--navy);
   margin-bottom: 12px;
 }
 
 .contact-desc {
-  color: rgba(255,255,255,0.6);
+  color: var(--text-gray);
   margin-bottom: 30px;
   font-size: 1rem;
 }
@@ -979,7 +986,7 @@ html, body {
 
 .contact-detail span,
 .contact-detail a {
-  color: var(--white);
+  color: var(--text-dark);
   font-size: 1rem;
 }
 
@@ -993,10 +1000,10 @@ html, body {
 .contact-form-home textarea {
   width: 100%;
   padding: 14px 18px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--light-gray);
+  border: 1px solid var(--gray);
   border-radius: 8px;
-  color: var(--white);
+  color: var(--text-dark);
   font-family: var(--font-body);
   font-size: 0.95rem;
   transition: border-color 0.3s;
@@ -1004,7 +1011,7 @@ html, body {
 
 .contact-form-home input::placeholder,
 .contact-form-home textarea::placeholder {
-  color: rgba(255,255,255,0.4);
+  color: #9ca3af;
 }
 
 .contact-form-home input:focus,
@@ -1557,14 +1564,14 @@ html, body {
 
 /* Footer */
 .site-footer {
-  background: var(--navy-dark);
+  background: #001a33;
   color: rgba(255,255,255,0.7);
   margin-top: 0;
 }
 
 /* Footer Top Bar */
 .footer-top {
-  background: var(--navy);
+  background: #002141;
   padding: 24px 0;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
@@ -1801,9 +1808,17 @@ html, body {
   color: var(--text-gray);
 }
 
+/* Main Content Wrapper */
+main {
+  background: #fff;
+  max-width: 1140px;
+  margin: 0 auto;
+  box-shadow: 0 0 60px rgba(0,0,0,0.3);
+}
+
 /* Magazine Hero */
 .mag-hero {
-  padding: 24px 0 0;
+  padding: 0;
 }
 
 .mag-hero-grid {
@@ -1883,8 +1898,8 @@ html, body {
 
 /* Hot This Week */
 .mag-hot {
-  background: var(--off-white);
-  border-left: 1px solid var(--gray);
+  background: #fff;
+  border-left: 1px solid #e5e7eb;
   padding: 28px 28px;
   display: flex;
   flex-direction: column;
