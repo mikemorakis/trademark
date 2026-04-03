@@ -8,7 +8,7 @@ let tags: any[] = [];
 let navCategories: any[] = [];
 
 if (db) {
-  const result = await db.prepare('SELECT id, title, slug, date, author, image, content, category_id FROM posts WHERE published = 1 ORDER BY date DESC').all();
+  const result = await db.prepare('SELECT id, title, slug, date, author, image, content, category_id, colab FROM posts WHERE published = 1 ORDER BY date DESC').all();
   allPosts = result.results || [];
   const tagResult = await db.prepare('SELECT t.id, t.name, COUNT(pt.post_id) as count FROM tags t LEFT JOIN post_tags pt ON t.id = pt.tag_id GROUP BY t.id ORDER BY count DESC LIMIT 20').all();
   tags = tagResult.results || [];
@@ -57,7 +57,7 @@ const faqSchema = {
               <span class="mag-category-badge">Πρόσφατο</span>
               <h2>{featuredPost.title}</h2>
               <p>{excerpt(featuredPost.content, 180)}</p>
-              <span class="mag-meta">{featuredPost.date} &bull; {featuredPost.author}</span>
+              <span class="mag-meta">{featuredPost.date} — του {featuredPost.author}{featuredPost.colab && ` σε συνεργασία με ${featuredPost.colab}`}</span>
             </div>
           </a>
         )}
@@ -103,7 +103,7 @@ const faqSchema = {
                 <span class="feed-date">{post.date}</span>
                 <h3>{post.title}</h3>
                 <p class="feed-excerpt">{excerpt(post.content)}</p>
-                <span class="feed-author">{post.author}</span>
+                <span class="feed-author">του {post.author}{post.colab && ` σε συνεργασία με ${post.colab}`}</span>
               </div>
               {post.image && (
                 <div class="feed-item-thumb">
