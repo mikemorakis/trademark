@@ -1384,10 +1384,10 @@ body {
 
 /* Static Page Content */
 .page-content {
-  background: var(--white);
+  background: transparent;
   border-radius: 0;
-  padding: 35px;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+  padding: 0;
+  box-shadow: none;
 }
 
 .page-content h1 {
@@ -2263,10 +2263,10 @@ main {
 }
 
 .sidebar-widget {
-  background: #fff;
+  background: transparent;
   border-radius: 0;
   padding: 22px;
-  border: 1px solid rgba(0,0,0,0.04);
+  border: none;
   box-shadow: none;
 }
 
@@ -2660,7 +2660,7 @@ main {
 .post-content table { max-width: 100%; overflow-x: auto; display: block; }
 .post-content p, .post-content li, .post-content blockquote { max-width: 100%; }
 .post-sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 20px; align-self: start; }
-.ps-widget { background: #fff; border-radius: 0; padding: 22px; border: 1px solid rgba(0,0,0,0.04); box-shadow: none; }
+.ps-widget { background: transparent; border-radius: 0; padding: 22px; border: none; box-shadow: none; }
 .ps-widget h4 { font-size: 0.8rem; color: #0f2d4a; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #ff6b4a; }
 .ps-banner-b2b { background: linear-gradient(135deg, #0f2d4a, #1a4a73); border: none; }
 .ps-banner-b2b .ps-banner-label { display: inline-block; background: #ff6b4a; color: #fff; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 3px 10px; border-radius: 0; margin-bottom: 12px; }
