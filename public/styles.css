@@ -3064,9 +3064,13 @@ main {
     flex-direction: column;
   }
 
-  /* Sidebar banners on mobile */
+  /* All sidebar widgets on mobile */
+  .sidebar-widget, .ps-widget {
+    padding: 22px 16px !important;
+  }
+
   .sidebar-cta, .sidebar-elearning, .ps-banner-b2b, .ps-banner-partner {
-    margin: 8px 16px !important;
+    margin: 8px 0 !important;
     padding: 28px 28px !important;
   }
 
