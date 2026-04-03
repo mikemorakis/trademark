@@ -3056,6 +3056,17 @@ main {
   /* Sidebar below content on mobile */
   .post-sidebar, .news-sidebar {
     order: 2;
+    margin-top: 30px;
+  }
+
+  .post-layout, .news-grid {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  /* Sidebar banners margins on mobile */
+  .sidebar-cta, .sidebar-elearning, .ps-banner-b2b, .ps-banner-partner {
+    margin: 0 16px;
   }
 
   /* Footer mobile */
