@@ -100,16 +100,6 @@ img {
   transition: background 0.4s, box-shadow 0.4s;
 }
 
-.site-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #ff6b4a 20%, #ffaa80 50%, #ff6b4a 80%, transparent 100%);
-  opacity: 0.7;
-}
 
 .site-header.transparent {
   position: fixed;
@@ -1575,7 +1565,7 @@ html, body {
 
 /* Footer */
 .site-footer {
-  background: #002141;
+  background: transparent;
   color: rgba(255,255,255,0.7);
   margin-top: 0;
   max-width: 1140px;
@@ -1585,7 +1575,7 @@ html, body {
 
 /* Footer Top Bar */
 .footer-top {
-  background: #002141;
+  background: transparent;
   padding: 24px 0;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
@@ -1719,7 +1709,7 @@ html, body {
 
 /* Footer Legal */
 .footer-legal {
-  background: #002141;
+  background: transparent;
   padding: 28px 0;
   border-top: 1px solid rgba(255,255,255,0.06);
 }
