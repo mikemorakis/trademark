@@ -73,8 +73,8 @@ img {
 }
 
 .site-footer .container {
-  max-width: 1440px;
-  padding: 0 40px;
+  max-width: 1140px;
+  padding: 0 24px;
 }
 
 ::selection {
