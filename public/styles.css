@@ -3025,9 +3025,21 @@ main {
 }
 
 @media (max-width: 768px) {
-  main, .mag-hero .container, .mag-topics .container {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+  .header-inner {
+    padding: 0 16px;
+  }
+
+  .mag-hero .container {
+    padding: 0 !important;
+  }
+
+  .mag-topics .container {
+    padding: 0 !important;
+  }
+
+  main {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .mag-topics .news-feed,
