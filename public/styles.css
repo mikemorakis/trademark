@@ -3036,6 +3036,62 @@ main {
     padding-right: 0;
   }
 
+  /* Hide desktop CTA in mobile nav */
+  .nav-links .nav-btn-cta {
+    display: none;
+  }
+
+  /* Sidebar below content on mobile */
+  .post-sidebar, .news-sidebar {
+    order: 2;
+  }
+
+  /* Footer mobile margins */
+  .site-footer {
+    padding: 0 16px;
+  }
+
+  .footer-top-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-phones {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .phone-btn {
+    text-align: center;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-badges {
+    justify-content: center;
+  }
+
+  .footer-policies {
+    justify-content: center;
+  }
+
+  .footer-disclaimer {
+    text-align: center;
+  }
+
+  .footer-practice h3 {
+    font-size: 0.9rem;
+  }
+
   .hero-home {
     padding: 0 0 40px;
     min-height: 100vh;
