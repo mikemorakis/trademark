@@ -18,9 +18,10 @@ if (Astro.request.method === 'POST' && db) {
   const author = form.get('author')?.toString() || 'Giannis Psarakis';
   const image = form.get('image')?.toString() || null;
   const colab = form.get('colab')?.toString() || null;
+  const colabUrl = form.get('colab_url')?.toString() || null;
   try {
-    await db.prepare("UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, image=?, colab=?, updated_at=datetime('now') WHERE id=?")
-      .bind(title, slug, content, date, author, image, colab, id).run();
+    await db.prepare("UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, image=?, colab=?, colab_url=?, updated_at=datetime('now') WHERE id=?")
+      .bind(title, slug, content, date, author, image, colab, colabUrl, id).run();
     success = 'Post updated!';
   } catch(e: any) {
     error = e.message || 'Failed to update';
@@ -92,8 +93,16 @@ if (!post) return Astro.redirect('/admin/');
             <input type="text" name="author" value={post.author} />
           </div>
         </div>
-        <label>Συνεργασία (Colab)</label>
-        <input type="text" name="colab" value={post.colab || ''} placeholder="π.χ. Naftemporiki, HuffingtonPost, Capital.gr" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label>Συνεργασία (Colab)</label>
+            <input type="text" name="colab" value={post.colab || ''} placeholder="π.χ. Naftemporiki" />
+          </div>
+          <div>
+            <label>Colab Link</label>
+            <input type="text" name="colab_url" value={post.colab_url || ''} placeholder="https://www.naftemporiki.gr" />
+          </div>
+        </div>
         <label>Featured Image</label>
         <div class="image-upload" onclick="document.getElementById('imageFile').click()" style="border:2px dashed #d1d5db;border-radius:8px;padding:24px;text-align:center;cursor:pointer;">
           <input type="file" id="imageFile" accept="image/*" style="display:none;" />

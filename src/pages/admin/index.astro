@@ -56,8 +56,9 @@ if (Astro.request.method === 'POST') {
     const categoryId = form.get('category_id')?.toString() || null;
     const image = form.get('image')?.toString() || null;
     const colab = form.get('colab')?.toString() || null;
+    const colabUrl = form.get('colab_url')?.toString() || null;
     try {
-      const res = await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, colab, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1) RETURNING id').bind(title, slug, content, author, date, categoryId, image, colab).first();
+      const res = await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, colab, colab_url, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1) RETURNING id').bind(title, slug, content, author, date, categoryId, image, colab, colabUrl).first();
       const postId = (res as any)?.id;
       const tagIds = form.getAll('tag_ids');
       if (postId && tagIds.length) {
@@ -212,8 +213,16 @@ if (loggedIn && db) {
               <input type="text" name="author" value="Giannis Psarakis" />
             </div>
           </div>
-          <label>Συνεργασία (Colab)</label>
-          <input type="text" name="colab" placeholder="π.χ. Naftemporiki, HuffingtonPost, Capital.gr" />
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <label>Συνεργασία (Colab)</label>
+              <input type="text" name="colab" placeholder="π.χ. Naftemporiki" />
+            </div>
+            <div>
+              <label>Colab Link</label>
+              <input type="text" name="colab_url" placeholder="https://www.naftemporiki.gr" />
+            </div>
+          </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px;">
             <div>
               <label>Category</label>

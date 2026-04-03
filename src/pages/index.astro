@@ -103,7 +103,7 @@ const faqSchema = {
                 <span class="feed-date">{post.date}</span>
                 <h3>{post.title}</h3>
                 <p class="feed-excerpt">{excerpt(post.content)}</p>
-                <span class="feed-author">του {post.author}{post.colab && ` σε συνεργασία με ${post.colab}`}</span>
+                <span class="feed-author">του {post.author}{post.colab && <Fragment> σε συνεργασία με {post.colab}</Fragment>}</span>
               </div>
               {post.image && (
                 <div class="feed-item-thumb">
