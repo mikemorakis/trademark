@@ -1823,6 +1823,10 @@ main {
   padding: 0;
 }
 
+.mag-hero .container {
+  padding: 0;
+}
+
 .mag-hero-grid {
   display: grid;
   grid-template-columns: 1fr 340px;
