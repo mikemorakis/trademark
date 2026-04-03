@@ -943,7 +943,7 @@ html, body {
 /* Section 6: Contact */
 .section-contact {
   padding: 60px 24px;
-  background: #fff;
+  background: var(--light-gray);
 }
 
 .contact-grid {
@@ -1297,10 +1297,10 @@ html, body {
 
 /* Single Post */
 .single-post {
-  background: var(--white);
+  background: transparent;
   border-radius: 0;
-  padding: 35px;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+  padding: 0;
+  box-shadow: none;
 }
 
 .single-post h1 {
