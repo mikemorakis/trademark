@@ -2286,6 +2286,7 @@ main {
 .sidebar-cta {
   background: var(--orange);
   border: none;
+  padding: 28px 24px !important;
 }
 
 .sidebar-cta h4 {
@@ -2587,6 +2588,7 @@ main {
   border: none;
   position: relative;
   overflow: hidden;
+  padding: 28px 24px !important;
 }
 
 .sidebar-elearning::after {
@@ -2664,13 +2666,13 @@ main {
 .post-sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 20px; align-self: start; }
 .ps-widget { background: transparent; border-radius: 0; padding: 22px 0; border: none; border-bottom: 1px solid var(--gray); box-shadow: none; }
 .ps-widget h4 { font-size: 0.8rem; color: #0f2d4a; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #ff6b4a; }
-.ps-banner-b2b { background: linear-gradient(135deg, #0f2d4a, #1a4a73); border: none; }
+.ps-banner-b2b { background: linear-gradient(135deg, #0f2d4a, #1a4a73); border: none; padding: 28px 24px !important; }
 .ps-banner-b2b .ps-banner-label { display: inline-block; background: #ff6b4a; color: #fff; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 3px 10px; border-radius: 0; margin-bottom: 12px; }
 .ps-banner-b2b h4 { color: #fff; border-bottom: none; padding-bottom: 0; margin-bottom: 10px; font-size: 1rem; }
 .ps-banner-b2b p { color: rgba(255,255,255,0.7); font-size: 0.82rem; line-height: 1.5; margin-bottom: 16px; }
 .ps-banner-btn { display: block; background: #ff6b4a; color: #fff; text-align: center; padding: 10px; border-radius: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: all 0.3s; }
 .ps-banner-btn:hover { background: #e55a0e; color: #fff; }
-.ps-banner-partner { background: #ff6b4a; border: none; }
+.ps-banner-partner { background: #ff6b4a; border: none; padding: 28px 24px !important; }
 .ps-banner-partner .ps-banner-label { display: inline-block; background: #fff; color: #ff6b4a; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: 3px 10px; border-radius: 0; margin-bottom: 12px; }
 .ps-banner-partner h4 { color: #fff; border-bottom: none; padding-bottom: 0; margin-bottom: 10px; font-size: 1rem; }
 .ps-banner-partner p { color: rgba(255,255,255,0.85); font-size: 0.82rem; line-height: 1.5; margin-bottom: 16px; }
