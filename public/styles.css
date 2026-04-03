@@ -2314,6 +2314,79 @@ html, body {
   }
 }
 
+/* E-Learning Sidebar Banner */
+.sidebar-elearning {
+  background: linear-gradient(135deg, #0f2d4a, #1a4a73);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-elearning::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 100px;
+  height: 100px;
+  background: rgba(251,100,18,0.15);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sidebar-elearning-badge {
+  display: inline-block;
+  background: #fb6412;
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+
+.sidebar-elearning h4 {
+  color: #fff !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 8px !important;
+  font-size: 0.95rem !important;
+  line-height: 1.4;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.sidebar-elearning p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.78rem;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.sidebar-elearning-btn {
+  display: block;
+  background: #fb6412;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar-elearning-btn:hover {
+  background: #fff;
+  color: #0f2d4a;
+}
+
 /* Single Post Layout */
 .post-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; }
 .single-post { min-width: 0; overflow: hidden; }
