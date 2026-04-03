@@ -2031,6 +2031,18 @@ main {
   padding: 48px 0 80px;
 }
 
+.mag-topics .container {
+  padding: 0;
+}
+
+.mag-topics .news-feed {
+  padding-left: 24px;
+}
+
+.mag-topics .news-sidebar {
+  padding-right: 24px;
+}
+
 /* News Portal - Homepage */
 .news-section {
   padding: 48px 0 80px;
