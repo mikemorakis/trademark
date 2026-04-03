@@ -385,7 +385,7 @@ if (loggedIn && db) {
           var data = await res.json();
           if (data.url) {
             document.getElementById('imageUrl').value = data.url;
-            preview.innerHTML = '<img src="' + data.url + '" style="max-height:120px;border-radius:6px;" /><p style="font-size:0.75rem;color:#16a34a;margin-top:8px;">Uploaded!</p>';
+            preview.innerHTML = '<img src="' + data.url + '" style="max-height:120px;" /><p style="font-size:0.7rem;color:#16a34a;margin-top:6px;">Image saved and attached to post</p>';
           } else {
             preview.innerHTML = '<p style="color:#dc2626;">Error: ' + (data.error || 'Upload failed') + '</p>';
           }
