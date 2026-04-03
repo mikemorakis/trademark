@@ -41,6 +41,7 @@ const faqSchema = {
 <BaseLayout title="The Trademark Hoop" description="Κατοχύρωση εμπορικού σήματος - Δικηγόρος εμπορικών σημάτων | The Trademark Hoop">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    {featuredPost?.image && <link rel="preload" as="image" href={featuredPost.image} />}
   </Fragment>
 
   <!-- HERO: Featured + Hot This Week -->
@@ -51,7 +52,7 @@ const faqSchema = {
         {featuredPost && (
           <a href={`/blog/${featuredPost.slug}`} class="mag-featured">
             <div class="mag-featured-img">
-              {featuredPost.image ? <img src={featuredPost.image} alt={featuredPost.title} /> : <div class="mag-featured-placeholder"></div>}
+              {featuredPost.image ? <img src={featuredPost.image} alt={featuredPost.title} fetchpriority="high" width="800" height="480" /> : <div class="mag-featured-placeholder"></div>}
             </div>
             <div class="mag-featured-body">
               <span class="mag-category-badge">Πρόσφατο</span>

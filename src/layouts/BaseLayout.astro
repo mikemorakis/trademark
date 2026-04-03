@@ -33,7 +33,9 @@ try {
   <meta name="description" content={description} />
   <title>{title} | The Trademark Hoop</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="preload" href="/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="/styles.css" /></noscript>
+  <style is:inline>:root{--navy:#0f2d4a;--orange:#ff6b4a;--white:#fff;--text-dark:#1f2937;--text-gray:#4b5563;--gray:#d1d5db;--light-gray:#f3f4f6}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Verdana,sans-serif;font-weight:400;color:#1f2937;background:linear-gradient(180deg,#001a33 0%,#002141 15%,#00294f 50%,#002141 85%,#001a33 100%);background-attachment:fixed;font-size:15px;line-height:1.75}main{background:#fff;max-width:1140px;margin:0 auto}.site-header{background:transparent;padding:16px 0;position:relative;z-index:1000}.header-inner{display:flex;align-items:center;justify-content:space-between;max-width:1140px;margin:0 auto}.site-logo img{height:52px;width:auto}.main-nav{display:flex;align-items:center;gap:5px}.main-nav a{font-family:Verdana,sans-serif;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.8);padding:8px 10px;text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;text-decoration:none}.hamburger{display:none}@media(max-width:1100px){.hamburger{display:flex;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:5px}.hamburger span{display:block;width:25px;height:3px;background:#fff}.main-nav{display:none}}</style>
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="canonical" href={Astro.url.href} />
   <slot name="head" />

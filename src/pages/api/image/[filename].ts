@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 
-export const GET: APIRoute = async ({ params }) => {
+export const GET: APIRoute = async ({ params, request }) => {
   const { filename } = params;
   const db = env.DB;
 
@@ -12,10 +12,16 @@ export const GET: APIRoute = async ({ params }) => {
     }
 
     const binary = Uint8Array.from(atob(row.data), c => c.charCodeAt(0));
+
+    // Check if browser accepts WebP
+    const accept = request.headers.get('Accept') || '';
+    const supportsWebP = accept.includes('image/webp');
+
     return new Response(binary, {
       headers: {
-        'Content-Type': row.mime,
-        'Cache-Control': 'public, max-age=31536000',
+        'Content-Type': supportsWebP && row.mime !== 'image/svg+xml' ? 'image/webp' : row.mime,
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Vary': 'Accept',
       },
     });
   } catch (e: any) {
