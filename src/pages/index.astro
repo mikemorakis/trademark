@@ -1,80 +1,91 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
 import { env } from "cloudflare:workers";
 
 const db = env.DB;
 let allPosts: any[] = [];
-let featuredPost: any = null;
-let categories: any[] = [];
 let tags: any[] = [];
+let navCategories: any[] = [];
 
 if (db) {
-  const result = await db.prepare('SELECT id, title, slug, date, author, image, content FROM posts WHERE published = 1 ORDER BY date DESC').all();
+  const result = await db.prepare('SELECT id, title, slug, date, author, image, content, category_id FROM posts WHERE published = 1 ORDER BY date DESC').all();
   allPosts = result.results || [];
-  featuredPost = allPosts[0] || null;
-  const catResult = await db.prepare('SELECT id, name, slug FROM categories ORDER BY name').all();
-  categories = catResult.results || [];
   const tagResult = await db.prepare('SELECT t.id, t.name, COUNT(pt.post_id) as count FROM tags t LEFT JOIN post_tags pt ON t.id = pt.tag_id GROUP BY t.id ORDER BY count DESC LIMIT 20').all();
   tags = tagResult.results || [];
+  const catResult = await db.prepare(`
+    SELECT c.id, c.name, c.slug, COUNT(p.id) as post_count
+    FROM categories c JOIN posts p ON p.category_id = c.id AND p.published = 1
+    GROUP BY c.id ORDER BY c.name
+  `).all();
+  navCategories = catResult.results || [];
 }
 
-const feedPosts = allPosts.slice(1, 11);
+const featuredPost = allPosts[0] || null;
+const hotPosts = allPosts.slice(1, 6);
+const feedPosts = allPosts.slice(6, 16);
+
 const excerpt = (content: string, len = 160) => {
   if (!content) return '';
-  const text = content.replace(/<[^>]*>?/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
-  return text.length > len ? text.substring(0, len) + '...' : text;
+  return content.replace(/<[^>]*>?/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim().substring(0, len) + (content.length > len ? '...' : '');
 };
-
-const faqItems = [
-  { question: 'Με συμφέρει η κατοχύρωση εμπορικού σήματος;', answer: 'Η κατοχύρωση εμπορικού σήματος αποτελεί μια ιδιαίτερα συμφέρουσα επιλογή για κάθε επιχείρηση. Σύμφωνα με έρευνες, επιχειρήσεις που επενδύουν σε δικαιώματα διανοητικής ιδιοκτησίας παρουσιάζουν αυξημένα έσοδα ανά υπάλληλο κατά 55%. Η Ελλάδα προσφέρει τα χαμηλότερα τέλη καταχώρισης μεταξύ συγκρίσιμων ευρωπαϊκών χωρών, στα 100 ευρώ ανά κλάση.' },
-  { question: 'Τι είναι το εμπορικό σήμα και τι μπορώ να κατοχυρώσω;', answer: 'Σύμφωνα με τον νόμο 4679/2020, εμπορικό σήμα μπορεί να αποτελείται από λέξεις, ονόματα, σχέδια, γράμματα, αριθμούς, χρώματα, σχήμα προϊόντος ή συσκευασίας, ή ήχους, εφόσον μπορούν να διακρίνουν τα προϊόντα ή τις υπηρεσίες μιας επιχείρησης από εκείνα άλλων.' },
-  { question: 'Προστατεύομαι για πάντα; Σε ποιες περιοχές;', answer: 'Η προστασία διαρκεί 10 έτη από την ημερομηνία κατάθεσης, με δυνατότητα ανανέωσης επ\' αόριστον. Εθνικό σήμα (Ελλάδα), σήμα ΕΕ (όλα τα κράτη-μέλη) ή διεθνής καταχώριση.' },
-  { question: 'Γιατί χρειάζομαι ειδικό πριν την καταχώριση;', answer: 'Η καταχώριση σήματος χωρίς προηγούμενη νομική μελέτη μπορεί να αποτελέσει "παγίδα πρώτης κατηγορίας". Τρίτοι μπορούν να αμφισβητήσουν το σήμα με αιτήσεις ακύρωσης, αγωγές ή ποινικές διώξεις.' },
-];
 
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": faqItems.map(item => ({ "@type": "Question", "name": item.question, "acceptedAnswer": { "@type": "Answer", "text": item.answer } })),
+  "mainEntity": [
+    { "@type": "Question", "name": "Με συμφέρει η κατοχύρωση εμπορικού σήματος;", "acceptedAnswer": { "@type": "Answer", "text": "Η κατοχύρωση εμπορικού σήματος αποτελεί μια ιδιαίτερα συμφέρουσα επιλογή για κάθε επιχείρηση." } },
+  ],
 };
-
-const clients = [
-  { name: 'Arrena', logo: '/images/client-arrena.jpg' },
-  { name: 'Jackaroo', logo: '/images/client-jackaroo.jpg' },
-  { name: 'Nerapigon Grammou', logo: '/images/client-nerapigon.jpg' },
-  { name: 'Chord', logo: '/images/client-chord.jpg' },
-  { name: 'Simon', logo: '/images/client-simon.jpg' },
-  { name: 'Lunch', logo: '/images/client-lunch.jpg' },
-  { name: 'Brand', logo: '/images/client-brand.jpg' },
-  { name: 'Papanikolaou', logo: '/images/client-papanikolaou.jpg' },
-  { name: 'LB', logo: '/images/client-lb.jpg' },
-];
 ---
 
-<BaseLayout title="Κατοχύρωση Εμπορικού Σήματος" description="Κατοχύρωση εμπορικού σήματος - Δικηγόρος εμπορικών σημάτων | The Trademark Hoop">
+<BaseLayout title="The Trademark Hoop" description="Κατοχύρωση εμπορικού σήματος - Δικηγόρος εμπορικών σημάτων | The Trademark Hoop">
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </Fragment>
 
-  <!-- NEWS PORTAL: Featured + Feed + Sidebar -->
-  <section class="news-section">
+  <!-- HERO: Featured + Hot This Week -->
+  <section class="mag-hero">
     <div class="container">
-      <!-- Featured Post Banner -->
-      {featuredPost && (
-        <a href={`/blog/${featuredPost.slug}`} class="featured-post">
-          {featuredPost.image && <img src={featuredPost.image} alt={featuredPost.title} class="featured-img" />}
-          <div class="featured-overlay">
-            <span class="featured-badge">Πρόσφατο</span>
-            <h2>{featuredPost.title}</h2>
-            <p>{excerpt(featuredPost.content, 200)}</p>
-            <span class="featured-meta">{featuredPost.date} &bull; {featuredPost.author}</span>
-          </div>
-        </a>
-      )}
+      <div class="mag-hero-grid">
+        <!-- Featured (Left) -->
+        {featuredPost && (
+          <a href={`/blog/${featuredPost.slug}`} class="mag-featured">
+            <div class="mag-featured-img">
+              {featuredPost.image ? <img src={featuredPost.image} alt={featuredPost.title} /> : <div class="mag-featured-placeholder"></div>}
+            </div>
+            <div class="mag-featured-body">
+              <span class="mag-category-badge">Πρόσφατο</span>
+              <h2>{featuredPost.title}</h2>
+              <p>{excerpt(featuredPost.content, 180)}</p>
+              <span class="mag-meta">{featuredPost.date} &bull; {featuredPost.author}</span>
+            </div>
+          </a>
+        )}
 
+        <!-- Hot This Week (Right) -->
+        <div class="mag-hot">
+          <h3 class="mag-hot-title">Hot this week</h3>
+          <div class="mag-hot-list">
+            {hotPosts.map((post: any, i: number) => (
+              <a href={`/blog/${post.slug}`} class="mag-hot-item">
+                <div class="mag-hot-body">
+                  <span class="mag-hot-cat">Trademark</span>
+                  <h4>{post.title}</h4>
+                </div>
+                <span class="mag-hot-num">{i + 1}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOPICS: Feed + Sidebar -->
+  <section class="mag-topics">
+    <div class="container">
       <div class="news-grid">
-        <!-- Main Feed -->
+        <!-- Feed -->
         <div class="news-feed">
           <h2 class="feed-title">Τελευταία Άρθρα</h2>
           {feedPosts.map((post: any) => (
@@ -92,15 +103,10 @@ const clients = [
               )}
             </a>
           ))}
-          <div style="margin-top: 24px;">
-            <a href="/" class="btn-outline">Όλα τα άρθρα</a>
-          </div>
         </div>
 
         <!-- Sidebar -->
         <aside class="news-sidebar">
-          <!-- CTA Widget -->
-          <!-- E-Learning Banner -->
           <div class="sidebar-widget sidebar-elearning">
             <span class="sidebar-elearning-badge">E-Learning Course</span>
             <h4>Κατοχύρωση εμπορικού σήματος και αποτελεσματική προστασία του</h4>
@@ -108,14 +114,12 @@ const clients = [
             <a href="https://www.nb.org" target="_blank" rel="noopener" class="sidebar-elearning-btn">Μάθε περισσότερα</a>
           </div>
 
-          <!-- Guest Blogging -->
           <div class="sidebar-widget sidebar-cta">
             <h4>Guest Blogging</h4>
             <p>Γράψε για εμάς! Δημοσίευσε το άρθρο σου στο Trademark Hoop.</p>
             <a href="/p/blog-page_8.html" class="sidebar-btn">Συνεργασίες</a>
           </div>
 
-          <!-- Tags Cloud -->
           <div class="sidebar-widget">
             <h4>Tags</h4>
             <div class="sidebar-tags">
@@ -124,10 +128,8 @@ const clients = [
               ))}
             </div>
           </div>
-
         </aside>
       </div>
-
     </div>
   </section>
 
