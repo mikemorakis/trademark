@@ -32,7 +32,8 @@ body {
   font-family: var(--font-body);
   font-weight: 400;
   color: var(--text-dark);
-  background: #002141;
+  background: linear-gradient(180deg, #001a33 0%, #002141 15%, #00294f 50%, #002141 85%, #001a33 100%);
+  background-attachment: fixed;
   line-height: 1.75;
   font-size: 15px;
   letter-spacing: 0.01em;
@@ -97,6 +98,17 @@ img {
   top: 0;
   z-index: 1000;
   transition: background 0.4s, box-shadow 0.4s;
+}
+
+.site-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #ff6b4a 20%, #ffaa80 50%, #ff6b4a 80%, transparent 100%);
+  opacity: 0.7;
 }
 
 .site-header.transparent {
