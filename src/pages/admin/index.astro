@@ -57,8 +57,9 @@ if (Astro.request.method === 'POST') {
     const image = form.get('image')?.toString() || null;
     const colab = form.get('colab')?.toString() || null;
     const colabUrl = form.get('colab_url')?.toString() || null;
+    const colabPrefix = form.get('colab_prefix')?.toString() || null;
     try {
-      const res = await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, colab, colab_url, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1) RETURNING id').bind(title, slug, content, author, date, categoryId, image, colab, colabUrl).first();
+      const res = await db.prepare('INSERT INTO posts (title, slug, content, author, date, category_id, image, colab, colab_url, colab_prefix, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1) RETURNING id').bind(title, slug, content, author, date, categoryId, image, colab, colabUrl, colabPrefix).first();
       const postId = (res as any)?.id;
       const tagIds = form.getAll('tag_ids');
       if (postId && tagIds.length) {
@@ -214,10 +215,14 @@ if (loggedIn && db) {
               <input type="text" name="author" value="Giannis Psarakis" />
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;">
             <div>
               <label>Συνεργασία (Colab)</label>
               <input type="text" name="colab" placeholder="π.χ. Naftemporiki" />
+            </div>
+            <div>
+              <label>Άρθρο</label>
+              <input type="text" name="colab_prefix" placeholder="π.χ. το, την" style="width:80px;" />
             </div>
             <div>
               <label>Colab Link</label>

@@ -19,9 +19,10 @@ if (Astro.request.method === 'POST' && db) {
   const image = form.get('image')?.toString() || null;
   const colab = form.get('colab')?.toString() || null;
   const colabUrl = form.get('colab_url')?.toString() || null;
+  const colabPrefix = form.get('colab_prefix')?.toString() || null;
   try {
-    await db.prepare("UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, image=?, colab=?, colab_url=?, updated_at=datetime('now') WHERE id=?")
-      .bind(title, slug, content, date, author, image, colab, colabUrl, id).run();
+    await db.prepare("UPDATE posts SET title=?, slug=?, content=?, date=?, author=?, image=?, colab=?, colab_url=?, colab_prefix=?, updated_at=datetime('now') WHERE id=?")
+      .bind(title, slug, content, date, author, image, colab, colabUrl, colabPrefix, id).run();
     success = 'Post updated!';
   } catch(e: any) {
     error = e.message || 'Failed to update';
@@ -94,10 +95,14 @@ if (!post) return Astro.redirect('/admin/');
             <input type="text" name="author" value={post.author} />
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;">
           <div>
             <label>Συνεργασία (Colab)</label>
             <input type="text" name="colab" value={post.colab || ''} placeholder="π.χ. Naftemporiki" />
+          </div>
+          <div>
+            <label>Άρθρο</label>
+            <input type="text" name="colab_prefix" value={post.colab_prefix || ''} placeholder="π.χ. το, την" style="width:80px;" />
           </div>
           <div>
             <label>Colab Link</label>
