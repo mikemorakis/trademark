@@ -97,7 +97,7 @@ try {
       <div class="container">
         <div class="footer-top-inner">
           <div class="footer-brand">
-            <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" class="footer-logo" />
+            <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" class="footer-logo" width="231" height="55" />
             <p>Λυκαβηττού 2, Κολωνάκι, Αθήνα</p>
           </div>
           <div class="footer-phones">
@@ -190,7 +190,7 @@ try {
     <div class="cookie-bar-inner">
       <div class="cookie-bar-content">
         <div class="cookie-bar-header">
-          <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" class="cookie-logo" />
+          <img src="/trademarkhoop-logo.png" alt="The Trademark Hoop" class="cookie-logo" width="231" height="55" />
         </div>
         <p>Χρησιμοποιούμε cookies για τη βελτίωση της εμπειρίας σας, την ανάλυση επισκεψιμότητας και την προβολή εξατομικευμένου περιεχομένου. Μπορείτε να διαχειριστείτε τις προτιμήσεις σας παρακάτω. Για περισσότερες πληροφορίες, δείτε την <a href="/p/trademark-hoop_26.html">Πολιτική Cookies</a> και την <a href="/p/trademark-hoop_26.html">Πολιτική Απορρήτου</a>.</p>
         <div class="cookie-options" id="cookieOptions" style="display:none;">
@@ -251,8 +251,8 @@ try {
     (function() {
       const bar = document.getElementById('cookieBar');
       const opts = document.getElementById('cookieOptions');
-      if (localStorage.getItem('cookieConsent')) { bar.style.display = 'none'; return; }
-      bar.style.display = 'flex';
+      if (localStorage.getItem('cookieConsent')) return;
+      setTimeout(() => bar.classList.add('visible'), 500);
 
       document.getElementById('cookieToggleOptions')?.addEventListener('click', () => {
         opts.style.display = opts.style.display === 'none' ? 'block' : 'none';
@@ -266,7 +266,7 @@ try {
           functional: true,
           date: new Date().toISOString()
         }));
-        bar.style.display = 'none';
+        bar.classList.remove('visible');
       });
 
       document.getElementById('cookieReject')?.addEventListener('click', () => {
@@ -277,7 +277,7 @@ try {
           functional: false,
           date: new Date().toISOString()
         }));
-        bar.style.display = 'none';
+        bar.classList.remove('visible');
       });
     })();
   </script>

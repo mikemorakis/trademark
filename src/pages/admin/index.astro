@@ -397,9 +397,28 @@ if (loggedIn && db) {
         var file = e.target.files[0];
         if (!file) return;
         var preview = document.getElementById('imagePreview');
+        preview.innerHTML = '<p style="color:#ff6b4a;">Compressing...</p>';
+        // Resize image client-side to max 800px
+        var resized = await new Promise(function(resolve) {
+          var img = new Image();
+          img.onload = function() {
+            var maxW = 800, maxH = 800;
+            var w = img.width, h = img.height;
+            if (w > maxW || h > maxH) {
+              var ratio = Math.min(maxW / w, maxH / h);
+              w = Math.round(w * ratio);
+              h = Math.round(h * ratio);
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            canvas.toBlob(function(blob) { resolve(blob); }, 'image/jpeg', 0.82);
+          };
+          img.src = URL.createObjectURL(file);
+        });
         preview.innerHTML = '<p style="color:#ff6b4a;">Uploading...</p>';
         var fd = new FormData();
-        fd.append('file', file);
+        fd.append('file', new File([resized], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
         try {
           var res = await fetch('/api/upload', { method: 'POST', body: fd, credentials: 'same-origin' });
           var data = await res.json();
