@@ -23,3 +23,5 @@ blockquote p,.post-content blockquote p{margin-bottom:0;padding-left:20px;}
 .post-content ul,.post-content ol{margin:20px 0;padding-left:20px;}
 .post-content ul li::marker{color:#ff6b4a;}
 .post-content ol li::marker{color:#ff6b4a;font-weight:700;}
+.post-content>p:first-of-type{font-weight:600;font-size:1.05rem;color:#1e293b;}
+.post-content>p:first-of-type::first-letter{float:left;font-size:3.5rem;font-weight:700;line-height:0.8;margin:4px 10px 0 0;color:#ff6b4a;font-family:Georgia,serif;}
